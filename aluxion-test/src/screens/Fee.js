@@ -1,42 +1,80 @@
 import React from "react"
-import {FlatList, Image, StyleSheet, Text, View} from "react-native"
+import {
+  FlatList,
+  Image,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  View
+} from "react-native"
 import Images from "../Images"
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen"
+import {LinearGradient} from "expo-linear-gradient"
+
+const accesKey =
+  "a2f508640cb62f314e0e0763594d40aab1c858a7ef796184067c537a88b276aa"
+const secretKey =
+  "4ea19af370997bcb0c580c071437661346b073b8e2f5252871e171ecc3c783ee"
 
 export default class FeeScreen extends React.Component {
-  // componentDidMount() {
-  //   fetch("https://api.unsplash.com/photos/?client_id=" + cred.APP_ID)
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       this.setState({imgs: data})
-  //     })
-  //     .catch(err => {
-  //       console.log("Error happened during fetching!", err)
-  //     })
-  // }
+  state = {
+    imgs: []
+  }
+  componentDidMount() {
+    fetch("https://api.unsplash.com/photos/?client_id=" + accesKey)
+      .then(res => res.json())
+      .then(data => {
+        this.setState({imgs: data})
+      })
+      .catch(err => {
+        console.log("Error happened during fetching!", err)
+      })
+  }
 
   isOdd = num => num % 2
 
-  renderItem = ({item}) => (
-    <View
+  renderItem = ({item, index}) => (
+    <ImageBackground
       style={[
         styles.listItem,
-        this.isOdd(item) ? {marginTop: 26} : {marginBottom: 26}
+        this.isOdd(index) ? {marginTop: 26} : {marginBottom: 26},
+        {justifyContent: "flex-end", padding: 10, overflow: "hidden"}
       ]}
+      imageStyle={{borderRadius: 10}}
+      source={{
+        uri: item.urls.small
+      }}
     >
-      <Text>{item}</Text>
-    </View>
+      <LinearGradient
+        colors={["transparent", "rgba(0,0,0,0.9)"]}
+        start={[0.5, 0.7]}
+        style={[
+          styles.listItem,
+          {
+            position: "absolute",
+            left: 0,
+            right: 0,
+            top: 0
+          }
+        ]}
+      />
+      <Text
+        style={styles.userName}
+      >{`${item.user.first_name} ${item.user.last_name}`}</Text>
+      <Text style={styles.votos}>{`${item.likes} votos`}</Text>
+    </ImageBackground>
   )
 
   render() {
+    this.state.imgs && console.log(this.state.imgs)
     return (
       <View style={styles.container}>
         <FlatList
           numColumns={2}
-          data={[0, 1, 2, 3, 4, 5, 6, 7]}
+          data={this.state.imgs}
           keyExtractor={(item, index) => item + index}
           renderItem={this.renderItem}
           columnWrapperStyle={{flex: 1, justifyContent: "space-between"}}
@@ -44,7 +82,6 @@ export default class FeeScreen extends React.Component {
             marginTop: 120,
             marginHorizontal: 26
           }}
-          // contentOffset={{x: 0, y: -140}}
         />
 
         <View style={styles.headerContainer}>
@@ -62,7 +99,6 @@ export default class FeeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: "center",
     justifyContent: "center"
   },
   headerContainer: {
@@ -87,8 +123,18 @@ const styles = StyleSheet.create({
   listItem: {
     width: wp("40%"),
     height: wp("55%"),
-    // marginHorizontal: 10,
-    backgroundColor: "orange",
     borderRadius: 10
+  },
+  userName: {
+    fontFamily: "MuseoMedium",
+    fontSize: 12,
+    lineHeight: 14,
+    color: "#fff"
+  },
+  votos: {
+    fontFamily: "MuseoLight",
+    fontSize: 8,
+    lineHeight: 9,
+    color: "#fff"
   }
 })
