@@ -5,6 +5,7 @@ import {
   ImageBackground,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View
 } from "react-native"
 import Images from "../Images"
@@ -13,18 +14,25 @@ import {
   heightPercentageToDP as hp
 } from "react-native-responsive-screen"
 import {LinearGradient} from "expo-linear-gradient"
+import Unsplash from "unsplash-js/native"
 
 const accesKey =
   "a2f508640cb62f314e0e0763594d40aab1c858a7ef796184067c537a88b276aa"
 const secretKey =
   "4ea19af370997bcb0c580c071437661346b073b8e2f5252871e171ecc3c783ee"
 
+const unsplash = new Unsplash({
+  applicationId: accesKey,
+  secret: secretKey
+})
+
 export default class FeeScreen extends React.Component {
   state = {
     imgs: []
   }
   componentDidMount() {
-    fetch("https://api.unsplash.com/photos/?client_id=" + accesKey)
+    unsplash.photos
+      .listPhotos(Math.floor(Math.random() * 100), 16, "random")
       .then(res => res.json())
       .then(data => {
         this.setState({imgs: data})
@@ -37,39 +45,41 @@ export default class FeeScreen extends React.Component {
   isOdd = num => num % 2
 
   renderItem = ({item, index}) => (
-    <ImageBackground
-      style={[
-        styles.listItem,
-        this.isOdd(index) ? {marginTop: 26} : {marginBottom: 26},
-        {justifyContent: "flex-end", padding: 10, overflow: "hidden"}
-      ]}
-      imageStyle={{borderRadius: 10}}
-      source={{
-        uri: item.urls.small
-      }}
-    >
-      <LinearGradient
-        colors={["transparent", "rgba(0,0,0,0.9)"]}
-        start={[0.5, 0.7]}
+    <TouchableOpacity onPress={() => this.props.navigation.navigate("Detail")}>
+      <ImageBackground
         style={[
           styles.listItem,
-          {
-            position: "absolute",
-            left: 0,
-            right: 0,
-            top: 0
-          }
+          this.isOdd(index) ? {marginTop: 26} : {marginBottom: 26},
+          {justifyContent: "flex-end", padding: 10, overflow: "hidden"}
         ]}
-      />
-      <Text
-        style={styles.userName}
-      >{`${item.user.first_name} ${item.user.last_name}`}</Text>
-      <Text style={styles.votos}>{`${item.likes} votos`}</Text>
-    </ImageBackground>
+        imageStyle={{borderRadius: 10}}
+        source={{
+          uri: item.urls.small
+        }}
+      >
+        <LinearGradient
+          colors={["transparent", "rgba(0,0,0,0.9)"]}
+          start={[0.5, 0.7]}
+          style={[
+            styles.listItem,
+            {
+              position: "absolute",
+              left: 0,
+              right: 0,
+              top: 0
+            }
+          ]}
+        />
+        <Text
+          style={styles.userName}
+        >{`${item.user.first_name} ${item.user.last_name}`}</Text>
+        <Text style={styles.votos}>{`${item.likes} votos`}</Text>
+      </ImageBackground>
+    </TouchableOpacity>
   )
 
   render() {
-    this.state.imgs && console.log(this.state.imgs)
+    // this.state.imgs && console.log(this.state.imgs)
     return (
       <View style={styles.container}>
         <FlatList
