@@ -59,12 +59,14 @@ export default class DetailScreen extends React.Component {
               <Text
                 style={styles.votos}
               >{`${this.state.image.likes} votos`}</Text>
-							<TouchableOpacity style={{ flexDirection: 'row'}}>
-								<Image source={{uri: }}/>
-	              <Text
-	                style={styles.userName}
-	              >{`${this.state.image.user.first_name} ${this.state.image.user.last_name}`}</Text>
-							</TouchableOpacity>
+              <TouchableOpacity style={{flexDirection: "row"}}>
+                <Image
+                  source={{uri: this.state.image.user.profile_image.small}}
+                />
+                <Text
+                  style={styles.userName}
+                >{`${this.state.image.user.first_name} ${this.state.image.user.last_name}`}</Text>
+              </TouchableOpacity>
             </View>
           )}
 
