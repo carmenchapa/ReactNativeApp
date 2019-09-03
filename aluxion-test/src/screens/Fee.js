@@ -45,7 +45,9 @@ export default class FeeScreen extends React.Component {
   isOdd = num => num % 2
 
   renderItem = ({item, index}) => (
-    <TouchableOpacity onPress={() => this.props.navigation.navigate("Detail")}>
+    <TouchableOpacity
+      onPress={() => this.props.navigation.navigate("Detail", {image: item})}
+    >
       <ImageBackground
         style={[
           styles.listItem,
