@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import Images from "../Images";
 import { LinearGradient } from "expo-linear-gradient";
-import { getFullName, getPhotoTitle } from "../helperFunctions";
+import { getPhotoTitle } from "../helperFunctions";
 import { styles as s } from "../Styles";
 import Header from "../components/Header";
 
@@ -90,9 +90,7 @@ export default class DetailScreen extends React.Component {
                   source={{ uri: image.user.profile_image.medium }}
                 />
                 <View style={{ paddingLeft: 8, justifyContent: "center" }}>
-                  <Text style={s.detailUserName}>
-                    {getFullName(image.user)}
-                  </Text>
+                  <Text style={s.detailUserName}>{image.user.name}</Text>
                   <Text style={s.viewProfile}>View profile</Text>
                 </View>
               </TouchableOpacity>
