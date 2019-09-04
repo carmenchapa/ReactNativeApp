@@ -1,7 +1,7 @@
 import React from "react";
 import { FlatList, Image, StyleSheet, Text, View } from "react-native";
 import Header from "../components/Header";
-import { getFullName, getPhotoTitle } from "../helperFunctions";
+import { getPhotoTitle } from "../helperFunctions";
 import { styles as s } from "../Styles";
 import { ImageListItem } from "../components/ImageList";
 import Unsplash from "unsplash-js/native";
@@ -20,16 +20,33 @@ export default class ProfileScreen extends React.Component {
   state = {
     imgs: []
   };
-  componentDidMount() {
-    unsplash.photos
-      .listPhotos(Math.floor(Math.random() * 100), 16, "random")
+
+  loadData() {
+    const userName = this.props.navigation.state.params.item.user.username;
+    console.log(userName);
+    unsplash.users
+      .photos(userName, 1, 10)
       .then(res => res.json())
       .then(data => {
+        console.log(data);
         this.setState({ imgs: data });
       })
       .catch(err => {
         console.log("Error happened during fetching!", err);
       });
+  }
+
+  componentDidMount() {
+    this.loadData();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.navigation.state.params.item.user.name !==
+      this.props.navigation.state.params.item.user.name
+    ) {
+      this.loadData();
+    }
   }
 
   render() {
@@ -46,7 +63,7 @@ export default class ProfileScreen extends React.Component {
             source={{ uri: item.user.profile_image.medium }}
           />
           <View style={{ paddingLeft: 12, justifyContent: "center" }}>
-            <Text style={s.profileUserName}>{getFullName(item.user)}</Text>
+            <Text style={s.profileUserName}>{item.user.name}</Text>
             <View style={s.profileDescription}>
               <Text style={s.profileDescription}>{item.user.bio}</Text>
             </View>
@@ -70,7 +87,10 @@ export default class ProfileScreen extends React.Component {
           }}
         />
         {/*  */}
-        <Header icon="close" onPress={() => this.props.navigation.goBack()} />
+        <Header
+          icon="close"
+          onPress={() => this.props.navigation.goBack(null)}
+        />
       </View>
     );
   }
