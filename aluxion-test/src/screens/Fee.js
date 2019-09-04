@@ -3,7 +3,6 @@ import {
   FlatList,
   Image,
   ImageBackground,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View
@@ -13,6 +12,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import Unsplash from "unsplash-js/native";
 import { getPhotoTitle } from "../helperFunctions";
 import { styles as s } from "../Styles";
+import Header from "../components/Header";
 
 const accesKey =
   "a2f508640cb62f314e0e0763594d40aab1c858a7ef796184067c537a88b276aa";
@@ -83,13 +83,18 @@ export default class FeeScreen extends React.Component {
           }}
         />
 
-        <View style={s.headerContainer}>
+        <Header
+          icon="menu"
+          onPress={() => this.props.navigation.openDrawer()}
+        />
+
+        {/* <View style={s.headerContainer}>
           <View style={s.iconsContainer}>
             <Image source={Images.menu} />
             <Text style={s.pageTitle}>Discover</Text>
             <View style={{ width: 25 }} />
           </View>
-        </View>
+        </View> */}
       </View>
     );
   }

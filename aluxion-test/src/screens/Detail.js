@@ -3,7 +3,6 @@ import {
   Animated,
   Image,
   ImageBackground,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View
@@ -12,9 +11,10 @@ import Images from "../Images";
 import { LinearGradient } from "expo-linear-gradient";
 import { getFullName, getPhotoTitle } from "../helperFunctions";
 import { styles as s } from "../Styles";
+import Header from "../components/Header";
 
-opacityMin = 0;
-translateYMin = 300;
+const opacityMin = 0;
+const translateYMin = 300;
 
 export default class DetailScreen extends React.Component {
   state = {
@@ -79,13 +79,17 @@ export default class DetailScreen extends React.Component {
             </Animated.View>
           )}
 
-          <View style={s.headerContainer}>
+          <Header
+            icon="closeWhite"
+            onPress={() => this.props.navigation.goBack()}
+          />
+          {/* <View style={s.headerContainer}>
             <View style={s.iconsContainer}>
               <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                 <Image source={Images.closeWhite} />
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
         </ImageBackground>
       </TouchableOpacity>
     );
