@@ -37,12 +37,13 @@ export default class DetailScreen extends React.Component {
   }
 
   render() {
+    const { image, infoVisible } = this.state;
     const animatedStyle = {
       opacity: this.state.opacityValue,
       transform: [{ translateX: this.state.translateXValue }]
     };
 
-    console.log(this.state.image);
+    console.log(image);
     return (
       <TouchableOpacity
         activeOpacity={0.9}
@@ -51,9 +52,7 @@ export default class DetailScreen extends React.Component {
       >
         <ImageBackground
           style={s.endContainer}
-          source={{
-            uri: this.state.image.urls.regular
-          }}
+          source={{ uri: image.urls.regular }}
         >
           <LinearGradient
             colors={["transparent", "rgba(0,0,0,0.9)"]}
@@ -61,28 +60,18 @@ export default class DetailScreen extends React.Component {
             style={[s.gradient, s.fullFill]}
           />
 
-          {this.state.infoVisible && (
+          {infoVisible && (
             <Animated.View style={[s.detailInfo, animatedStyle]}>
-              <Text style={s.detailPhotoTitle}>
-                {getPhotoTitle(this.state.image)}
-              </Text>
-              <Text
-                style={s.detailLikes}
-              >{`${this.state.image.likes} likes`}</Text>
-              <TouchableOpacity
-                style={{
-                  flexDirection: "row",
-                  paddingTop: 26,
-                  marginBottom: 30
-                }}
-              >
+              <Text style={s.detailPhotoTitle}>{getPhotoTitle(image)}</Text>
+              <Text style={s.detailLikes}>{`${image.likes} likes`}</Text>
+              <TouchableOpacity style={s.profileContainer}>
                 <Image
-                  style={{ width: 40, height: 40, borderRadius: 20 }}
-                  source={{ uri: this.state.image.user.profile_image.small }}
+                  style={s.profileImage}
+                  source={{ uri: image.user.profile_image.small }}
                 />
                 <View style={{ paddingLeft: 8, justifyContent: "center" }}>
                   <Text style={s.detailUserName}>
-                    {getFullName(this.state.image.user)}
+                    {getFullName(image.user)}
                   </Text>
                   <Text style={s.viewProfile}>View profile</Text>
                 </View>
