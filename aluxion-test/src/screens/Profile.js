@@ -1,21 +1,77 @@
-import React from "react"
-import {StyleSheet, Text, View} from "react-native"
+import React from "react";
+import { FlatList, Image, StyleSheet, Text, View } from "react-native";
+import Header from "../components/Header";
+import { getFullName, getPhotoTitle } from "../helperFunctions";
+import { styles as s } from "../Styles";
+import { ImageListItem } from "../components/ImageList";
+import Unsplash from "unsplash-js/native";
+
+const accesKey =
+  "a2f508640cb62f314e0e0763594d40aab1c858a7ef796184067c537a88b276aa";
+const secretKey =
+  "4ea19af370997bcb0c580c071437661346b073b8e2f5252871e171ecc3c783ee";
+
+const unsplash = new Unsplash({
+  applicationId: accesKey,
+  secret: secretKey
+});
 
 export default class ProfileScreen extends React.Component {
+  state = {
+    imgs: []
+  };
+  componentDidMount() {
+    unsplash.photos
+      .listPhotos(Math.floor(Math.random() * 100), 16, "random")
+      .then(res => res.json())
+      .then(data => {
+        this.setState({ imgs: data });
+      })
+      .catch(err => {
+        console.log("Error happened during fetching!", err);
+      });
+  }
+
   render() {
+    const { navigation } = this.props;
+    const { item } = navigation.state.params;
     return (
-      <View style={styles.container}>
-        <Text>ProfileScreen</Text>
+      <View style={(s.container, s.startContent)}>
+        <View
+          style={[s.profileContainer, { marginTop: 100 }]}
+          onPress={() => this.props.navigation.navigate("Profile")}
+        >
+          <Image
+            style={s.profileImage}
+            source={{ uri: item.user.profile_image.medium }}
+          />
+          <View style={{ paddingLeft: 12, justifyContent: "center" }}>
+            <Text style={s.profileUserName}>{getFullName(item.user)}</Text>
+            <View style={s.profileDescription}>
+              <Text style={s.profileDescription}>{item.user.bio}</Text>
+            </View>
+          </View>
+        </View>
+
+        <FlatList
+          numColumns={2}
+          data={this.state.imgs}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({ item, index }) => (
+            <ImageListItem
+              item={item}
+              index={index}
+              navigate={() => navigation.navigate("Detail", { image: item })}
+            />
+          )}
+          columnWrapperStyle={s.columnWrapperStyle}
+          contentContainerStyle={{
+            marginHorizontal: 26
+          }}
+        />
+        {/*  */}
+        <Header icon="close" onPress={() => this.props.navigation.goBack()} />
       </View>
-    )
+    );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  }
-})
