@@ -19,14 +19,9 @@ const translateYMin = 300;
 export default class DetailScreen extends React.Component {
   state = {
     infoVisible: false,
-    image: this.props.navigation.state.params.image,
     opacityValue: new Animated.Value(opacityMin),
     translateXValue: new Animated.Value(translateYMin)
   };
-
-  componentDidMount() {
-    this.setState({ image: this.props.navigation.state.params.image });
-  }
 
   show(props) {
     this.setState({ infoVisible: true });
@@ -36,8 +31,30 @@ export default class DetailScreen extends React.Component {
     ]).start();
   }
 
+  hide(props) {
+    Animated.parallel([
+      Animated.timing(this.state.opacityValue, { toValue: 0 }),
+      Animated.timing(this.state.translateXValue, {
+        toValue: translateYMin,
+        duration: 0
+      })
+    ]).start();
+    this.setState({ infoVisible: false });
+  }
+
+  goProfile(image) {
+    this.props.navigation.navigate("Profile", { item: image });
+    this.hide();
+  }
+
+  close(image) {
+    this.hide();
+    this.props.navigation.goBack();
+  }
+
   render() {
-    const { image, infoVisible } = this.state;
+    const { image } = this.props.navigation.state.params;
+    const { infoVisible } = this.state;
     const animatedStyle = {
       opacity: this.state.opacityValue,
       transform: [{ translateX: this.state.translateXValue }]
@@ -51,7 +68,7 @@ export default class DetailScreen extends React.Component {
         onPress={() => this.show()}
       >
         <ImageBackground
-          style={s.endContainer}
+          style={[s.container, s.endContent]}
           source={{ uri: image.urls.regular }}
         >
           <LinearGradient
@@ -64,10 +81,13 @@ export default class DetailScreen extends React.Component {
             <Animated.View style={[s.detailInfo, animatedStyle]}>
               <Text style={s.detailPhotoTitle}>{getPhotoTitle(image)}</Text>
               <Text style={s.detailLikes}>{`${image.likes} likes`}</Text>
-              <TouchableOpacity style={s.profileContainer}>
+              <TouchableOpacity
+                style={s.profileContainer}
+                onPress={() => this.goProfile(image)}
+              >
                 <Image
-                  style={s.profileImage}
-                  source={{ uri: image.user.profile_image.small }}
+                  style={s.userImage}
+                  source={{ uri: image.user.profile_image.medium }}
                 />
                 <View style={{ paddingLeft: 8, justifyContent: "center" }}>
                   <Text style={s.detailUserName}>
@@ -79,10 +99,7 @@ export default class DetailScreen extends React.Component {
             </Animated.View>
           )}
 
-          <Header
-            icon="closeWhite"
-            onPress={() => this.props.navigation.goBack()}
-          />
+          <Header icon="closeWhite" onPress={() => this.close()} />
           {/* <View style={s.headerContainer}>
             <View style={s.iconsContainer}>
               <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
