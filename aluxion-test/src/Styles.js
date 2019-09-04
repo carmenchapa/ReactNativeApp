@@ -27,8 +27,7 @@ export const styles = StyleSheet.create({
     marginLeft: 26,
     paddingTop: 56,
     marginRight: 26,
-    paddingBottom: 26,
-    backgroundColor: "#fff"
+    paddingBottom: 26
   },
   iconsContainer: {
     flexDirection: "row",

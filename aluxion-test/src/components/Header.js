@@ -6,7 +6,12 @@ import { styles as s } from "../Styles";
 export default class Header extends React.Component {
   render() {
     return (
-      <View style={s.headerContainer}>
+      <View
+        style={[
+          s.headerContainer,
+          this.props.icon !== "closeWhite" && { backgroundColor: "#fff" }
+        ]}
+      >
         {this.props.icon == "menu" ? (
           <View style={s.iconsContainer}>
             <TouchableOpacity onPress={() => this.props.onPress()}>
