@@ -9,9 +9,11 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center"
   },
-  endContainer: {
-    flex: 1,
+  endContent: {
     justifyContent: "flex-end"
+  },
+  startContent: {
+    justifyContent: "flex-start"
   },
   fullFill: {
     height: "100%",
@@ -46,6 +48,10 @@ export const styles = StyleSheet.create({
     width: wp("40%"),
     height: wp("55%"),
     borderRadius: 10
+  },
+  columnWrapperStyle: {
+    flex: 1,
+    justifyContent: "space-between"
   },
   feeImageBackground: {
     justifyContent: "flex-end",
@@ -96,11 +102,34 @@ export const styles = StyleSheet.create({
   profileContainer: {
     flexDirection: "row",
     paddingTop: 26,
+    paddingLeft: 25,
+    marginRight: 25,
     marginBottom: 30
   },
-  profileImage: {
+  userImage: {
     width: 40,
     height: 40,
     borderRadius: 20
+  },
+  profileImage: {
+    width: 64,
+    height: 64,
+    borderRadius: 32
+  },
+  profileUserName: {
+    fontFamily: "MuseoMedium",
+    fontSize: 22,
+    lineHeight: 26,
+    paddingBottom: 8,
+    color: "#000"
+  },
+  profileDescription: {
+    // flex: 1,
+    fontFamily: "MuseoLight",
+    fontSize: 12,
+    lineHeight: 14,
+    paddingBottom: 8,
+    paddingRight: 25,
+    color: "#000"
   }
 });
