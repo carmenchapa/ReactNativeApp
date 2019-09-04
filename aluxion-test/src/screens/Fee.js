@@ -9,13 +9,10 @@ import {
   View
 } from "react-native";
 import Images from "../Images";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp
-} from "react-native-responsive-screen";
 import { LinearGradient } from "expo-linear-gradient";
 import Unsplash from "unsplash-js/native";
 import { getPhotoTitle } from "../helperFunctions";
+import { styles as s } from "../Styles";
 
 const accesKey =
   "a2f508640cb62f314e0e0763594d40aab1c858a7ef796184067c537a88b276aa";
@@ -51,7 +48,7 @@ export default class FeeScreen extends React.Component {
     >
       <ImageBackground
         style={[
-          styles.listItem,
+          s.listItem,
           this.isOdd(index) ? { marginTop: 26 } : { marginBottom: 26 },
           { justifyContent: "flex-end", padding: 10, overflow: "hidden" }
         ]}
@@ -63,26 +60,17 @@ export default class FeeScreen extends React.Component {
         <LinearGradient
           colors={["transparent", "rgba(0,0,0,0.9)"]}
           start={[0.5, 0.7]}
-          style={[
-            styles.listItem,
-            {
-              position: "absolute",
-              left: 0,
-              right: 0,
-              top: 0
-            }
-          ]}
+          style={[s.listItem, s.gradient]}
         />
-        <Text style={styles.photoTitle}>{getPhotoTitle(item)}</Text>
-        <Text style={styles.likes}>{`${item.likes} likes`}</Text>
+        <Text style={s.feePhotoTitle}>{getPhotoTitle(item)}</Text>
+        <Text style={s.feeLikes}>{`${item.likes} likes`}</Text>
       </ImageBackground>
     </TouchableOpacity>
   );
 
   render() {
-    // this.state.imgs && console.log(this.state.imgs)
     return (
-      <View style={styles.container}>
+      <View style={s.container}>
         <FlatList
           numColumns={2}
           data={this.state.imgs}
@@ -95,10 +83,10 @@ export default class FeeScreen extends React.Component {
           }}
         />
 
-        <View style={styles.headerContainer}>
-          <View style={styles.iconsContainer}>
+        <View style={s.headerContainer}>
+          <View style={s.iconsContainer}>
             <Image source={Images.menu} />
-            <Text style={styles.title}>Discover</Text>
+            <Text style={s.pageTitle}>Discover</Text>
             <View style={{ width: 25 }} />
           </View>
         </View>
@@ -106,47 +94,3 @@ export default class FeeScreen extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center"
-  },
-  headerContainer: {
-    position: "absolute",
-    top: 30,
-    left: 0,
-    right: 0,
-    marginLeft: 26,
-    marginRight: 26,
-    paddingVertical: 26
-  },
-  iconsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center"
-  },
-  title: {
-    fontFamily: "MuseoBlack",
-    fontSize: 24,
-    lineHeight: 28
-  },
-  listItem: {
-    width: wp("40%"),
-    height: wp("55%"),
-    borderRadius: 10
-  },
-  photoTitle: {
-    fontFamily: "MuseoMedium",
-    fontSize: 12,
-    lineHeight: 14,
-    marginBottom: 5,
-    color: "#fff"
-  },
-  likes: {
-    fontFamily: "MuseoLight",
-    fontSize: 8,
-    lineHeight: 9,
-    color: "#fff"
-  }
-});

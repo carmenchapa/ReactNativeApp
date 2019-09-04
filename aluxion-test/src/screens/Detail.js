@@ -11,6 +11,7 @@ import {
 import Images from "../Images";
 import { LinearGradient } from "expo-linear-gradient";
 import { getFullName, getPhotoTitle } from "../helperFunctions";
+import { styles as s } from "../Styles";
 
 opacityMin = 0;
 translateYMin = 300;
@@ -49,7 +50,7 @@ export default class DetailScreen extends React.Component {
         onPress={() => this.show()}
       >
         <ImageBackground
-          style={styles.container}
+          style={s.endContainer}
           source={{
             uri: this.state.image.urls.regular
           }}
@@ -57,16 +58,16 @@ export default class DetailScreen extends React.Component {
           <LinearGradient
             colors={["transparent", "rgba(0,0,0,0.9)"]}
             start={[0.5, 0.7]}
-            style={styles.gradient}
+            style={[s.gradient, s.fullFill]}
           />
 
           {this.state.infoVisible && (
-            <Animated.View style={[styles.info, animatedStyle]}>
-              <Text style={styles.photoTitle}>
+            <Animated.View style={[s.detailInfo, animatedStyle]}>
+              <Text style={s.detailPhotoTitle}>
                 {getPhotoTitle(this.state.image)}
               </Text>
               <Text
-                style={styles.likes}
+                style={s.detailLikes}
               >{`${this.state.image.likes} likes`}</Text>
               <TouchableOpacity
                 style={{
@@ -80,17 +81,17 @@ export default class DetailScreen extends React.Component {
                   source={{ uri: this.state.image.user.profile_image.small }}
                 />
                 <View style={{ paddingLeft: 8, justifyContent: "center" }}>
-                  <Text style={styles.userName}>
+                  <Text style={s.detailUserName}>
                     {getFullName(this.state.image.user)}
                   </Text>
-                  <Text style={styles.viewProfile}>View profile</Text>
+                  <Text style={s.viewProfile}>View profile</Text>
                 </View>
               </TouchableOpacity>
             </Animated.View>
           )}
 
-          <View style={styles.headerContainer}>
-            <View style={styles.iconsContainer}>
+          <View style={s.headerContainer}>
+            <View style={s.iconsContainer}>
               <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                 <Image source={Images.closeWhite} />
               </TouchableOpacity>
@@ -101,63 +102,3 @@ export default class DetailScreen extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // backgroundColor: "#fff",
-    // alignItems: "center",
-    justifyContent: "flex-end"
-    // padding: 26
-  },
-  headerContainer: {
-    position: "absolute",
-    top: 30,
-    left: 0,
-    right: 0,
-    marginLeft: 26,
-    marginRight: 26,
-    paddingVertical: 26
-  },
-  iconsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center"
-  },
-  info: {
-    padding: 26
-  },
-  photoTitle: {
-    fontFamily: "MuseoMedium",
-    fontSize: 42,
-    lineHeight: 49,
-    color: "#fff"
-  },
-  userName: {
-    fontFamily: "MuseoMedium",
-    fontSize: 12,
-    lineHeight: 14,
-    paddingBottom: 8,
-    color: "#fff"
-  },
-  viewProfile: {
-    fontFamily: "MuseoRegular",
-    fontSize: 10,
-    lineHeight: 12,
-    color: "#fff"
-  },
-  likes: {
-    fontFamily: "MuseoLight",
-    fontSize: 14,
-    lineHeight: 16,
-    color: "#fff"
-  },
-  gradient: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    height: "100%",
-    width: "100%"
-  }
-});
