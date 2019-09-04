@@ -92,5 +92,15 @@ export const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 12,
     color: "#fff"
+  },
+  profileContainer: {
+    flexDirection: "row",
+    paddingTop: 26,
+    marginBottom: 30
+  },
+  profileImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20
   }
 });
