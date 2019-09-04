@@ -1,34 +1,52 @@
-import React from "react"
+import React from "react";
 import {
+  Animated,
   Image,
   ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
   View
-} from "react-native"
-import Images from "../Images"
-import {LinearGradient} from "expo-linear-gradient"
+} from "react-native";
+import Images from "../Images";
+import { LinearGradient } from "expo-linear-gradient";
+import { getFullName, getPhotoTitle } from "../helperFunctions";
+
+opacityMin = 0;
+translateYMin = 300;
 
 export default class DetailScreen extends React.Component {
   state = {
     infoVisible: false,
-    image: this.props.navigation.state.params.image
-  }
+    image: this.props.navigation.state.params.image,
+    opacityValue: new Animated.Value(opacityMin),
+    translateXValue: new Animated.Value(translateYMin)
+  };
 
   componentDidMount() {
-    this.setState({image: this.props.navigation.state.params.image})
+    this.setState({ image: this.props.navigation.state.params.image });
   }
 
-  getPhotoTitle = item => {
-    return item.description ? item.description : item.alt_description
+  show(props) {
+    this.setState({ infoVisible: true });
+    Animated.parallel([
+      Animated.timing(this.state.opacityValue, { toValue: 1 }),
+      Animated.timing(this.state.translateXValue, { toValue: 0 })
+    ]).start();
   }
+
   render() {
-    console.log(this.state.image)
+    const animatedStyle = {
+      opacity: this.state.opacityValue,
+      transform: [{ translateX: this.state.translateXValue }]
+    };
+
+    console.log(this.state.image);
     return (
       <TouchableOpacity
-        style={{flex: 1}}
-        onPress={() => this.setState({infoVisible: true})}
+        activeOpacity={0.9}
+        style={{ flex: 1 }}
+        onPress={() => this.show()}
       >
         <ImageBackground
           style={styles.container}
@@ -39,35 +57,36 @@ export default class DetailScreen extends React.Component {
           <LinearGradient
             colors={["transparent", "rgba(0,0,0,0.9)"]}
             start={[0.5, 0.7]}
-            style={[
-              {
-                position: "absolute",
-                left: 0,
-                right: 0,
-                top: 0,
-                height: "100%",
-                width: "100%"
-              }
-            ]}
+            style={styles.gradient}
           />
 
           {this.state.infoVisible && (
-            <View style={styles.info}>
+            <Animated.View style={[styles.info, animatedStyle]}>
               <Text style={styles.photoTitle}>
-                {this.getPhotoTitle(this.state.image)}
+                {getPhotoTitle(this.state.image)}
               </Text>
               <Text
-                style={styles.votos}
-              >{`${this.state.image.likes} votos`}</Text>
-              <TouchableOpacity style={{flexDirection: "row"}}>
+                style={styles.likes}
+              >{`${this.state.image.likes} likes`}</Text>
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  paddingTop: 26,
+                  marginBottom: 30
+                }}
+              >
                 <Image
-                  source={{uri: this.state.image.user.profile_image.small}}
+                  style={{ width: 40, height: 40, borderRadius: 20 }}
+                  source={{ uri: this.state.image.user.profile_image.small }}
                 />
-                <Text
-                  style={styles.userName}
-                >{`${this.state.image.user.first_name} ${this.state.image.user.last_name}`}</Text>
+                <View style={{ paddingLeft: 8, justifyContent: "center" }}>
+                  <Text style={styles.userName}>
+                    {getFullName(this.state.image.user)}
+                  </Text>
+                  <Text style={styles.viewProfile}>View profile</Text>
+                </View>
               </TouchableOpacity>
-            </View>
+            </Animated.View>
           )}
 
           <View style={styles.headerContainer}>
@@ -79,7 +98,7 @@ export default class DetailScreen extends React.Component {
           </View>
         </ImageBackground>
       </TouchableOpacity>
-    )
+    );
   }
 }
 
@@ -118,12 +137,27 @@ const styles = StyleSheet.create({
     fontFamily: "MuseoMedium",
     fontSize: 12,
     lineHeight: 14,
+    paddingBottom: 8,
     color: "#fff"
   },
-  votos: {
+  viewProfile: {
+    fontFamily: "MuseoRegular",
+    fontSize: 10,
+    lineHeight: 12,
+    color: "#fff"
+  },
+  likes: {
     fontFamily: "MuseoLight",
     fontSize: 14,
     lineHeight: 16,
     color: "#fff"
+  },
+  gradient: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    height: "100%",
+    width: "100%"
   }
-})
+});
