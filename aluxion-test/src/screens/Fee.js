@@ -50,7 +50,7 @@ export default class FeeScreen extends React.Component {
         style={[
           s.listItem,
           this.isOdd(index) ? { marginTop: 26 } : { marginBottom: 26 },
-          { justifyContent: "flex-end", padding: 10, overflow: "hidden" }
+          s.feeImageBackground
         ]}
         imageStyle={{ borderRadius: 10 }}
         source={{

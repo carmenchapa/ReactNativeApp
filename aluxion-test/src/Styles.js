@@ -47,6 +47,11 @@ export const styles = StyleSheet.create({
     height: wp("55%"),
     borderRadius: 10
   },
+  feeImageBackground: {
+    justifyContent: "flex-end",
+    padding: 10,
+    overflow: "hidden"
+  },
   feePhotoTitle: {
     fontFamily: "MuseoMedium",
     fontSize: 12,
