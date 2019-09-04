@@ -21,12 +21,14 @@ export const styles = StyleSheet.create({
   },
   headerContainer: {
     position: "absolute",
-    top: 30,
+    top: 0,
     left: 0,
     right: 0,
     marginLeft: 26,
+    paddingTop: 56,
     marginRight: 26,
-    paddingVertical: 26
+    paddingBottom: 26,
+    backgroundColor: "#fff"
   },
   iconsContainer: {
     flexDirection: "row",
