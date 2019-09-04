@@ -36,6 +36,11 @@ export default class ProfileScreen extends React.Component {
       });
   }
 
+  close = () => {
+    this.props.navigation.goBack(null);
+    this.flatListRef.scrollToIndex({ index: 0 });
+  };
+
   componentDidMount() {
     this.loadData();
   }
@@ -71,6 +76,9 @@ export default class ProfileScreen extends React.Component {
         </View>
 
         <FlatList
+          ref={ref => {
+            this.flatListRef = ref;
+          }}
           numColumns={2}
           data={this.state.imgs}
           keyExtractor={(item, index) => item + index}
@@ -87,10 +95,7 @@ export default class ProfileScreen extends React.Component {
           }}
         />
         {/*  */}
-        <Header
-          icon="close"
-          onPress={() => this.props.navigation.goBack(null)}
-        />
+        <Header icon="close" onPress={() => this.close()} />
       </View>
     );
   }
