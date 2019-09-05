@@ -1,14 +1,7 @@
 import { applyMiddleware, createStore, combineReducers } from "redux";
 import thunk from "redux-thunk";
-import Unsplash from "unsplash-js/native";
-import { UPDATE, ACCESS_KEY, SECRET_KEY } from "../Constants";
-
-//-----** Unsplash **-----//
-
-const unsplash = new Unsplash({
-  applicationId: ACCESS_KEY,
-  secret: SECRET_KEY
-});
+import { UPDATE } from "../Constants";
+import { unsplash } from "../modules/Unsplash";
 
 //-----** Store **-----//
 
@@ -36,7 +29,7 @@ export const getRandomImages = () => {
 //-----** Reducers **-----//
 
 export const imgsReducer = (state = defaultState, action) => {
-  console.log("inside imgsReducer", action.payload);
+  console.log("inside imgsReducer");
   switch (action.type) {
     case UPDATE:
       return { ...state, images: action.payload };

@@ -3,17 +3,7 @@ import { FlatList, Image, Text, View } from "react-native";
 import Header from "../components/Header";
 import { styles as s } from "../Styles";
 import { ImageListItem } from "../components/ImageList";
-import Unsplash from "unsplash-js/native";
-
-const accesKey =
-  "a2f508640cb62f314e0e0763594d40aab1c858a7ef796184067c537a88b276aa";
-const secretKey =
-  "4ea19af370997bcb0c580c071437661346b073b8e2f5252871e171ecc3c783ee";
-
-const unsplash = new Unsplash({
-  applicationId: accesKey,
-  secret: secretKey
-});
+import { unsplash } from "../modules/Unsplash";
 
 export default class ProfileScreen extends React.Component {
   state = {
