@@ -105,7 +105,9 @@ class FeeScreen extends React.Component {
             <ImageListItem
               item={item}
               index={index}
-              navigate={() => navigation.navigate("Detail", { image: item })}
+              navigate={() =>
+                navigation.navigate("Detail", { data: "random", index: index })
+              }
             />
           )}
           columnWrapperStyle={s.columnWrapperStyle}
