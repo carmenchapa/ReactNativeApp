@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import Images from "../Images";
 import { LinearGradient } from "expo-linear-gradient";
 import { getPhotoTitle } from "../helperFunctions";
 import { styles as s } from "../Styles";
@@ -106,14 +105,11 @@ export default class DetailScreen extends React.Component {
             </Animated.View>
           )}
 
-          <Header icon="closeWhite" onPress={() => this.close()} />
-          {/* <View style={s.headerContainer}>
-            <View style={s.iconsContainer}>
-              <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                <Image source={Images.closeWhite} />
-              </TouchableOpacity>
-            </View>
-          </View> */}
+          <Header
+            icon="closeWhite"
+            onPress={() => this.close()}
+            extraStyles={s.header}
+          />
         </ImageBackground>
       </TouchableOpacity>
     );
