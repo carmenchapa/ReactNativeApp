@@ -30,7 +30,7 @@ export const ImageListItem = props => {
         <LinearGradient
           colors={["transparent", "rgba(0,0,0,0.9)"]}
           start={[0.5, 0.7]}
-          style={[s.listItem, s.gradient]}
+          style={[s.listItem, s.absoluteTop]}
         />
         <Text style={s.feePhotoTitle}>{getPhotoTitle(props.item)}</Text>
         <Text style={s.feeLikes}>{`${props.item.likes} likes`}</Text>

@@ -82,7 +82,7 @@ export default class DetailScreen extends React.Component {
           <LinearGradient
             colors={["transparent", "rgba(0,0,0,0.9)"]}
             start={[0.5, 0.7]}
-            style={[s.gradient, s.fullFill]}
+            style={[s.absoluteTop, s.fullFill]}
           />
 
           {infoVisible && (

@@ -9,6 +9,7 @@ export default class Header extends React.Component {
     return (
       <Animated.View
         style={[
+          s.absoluteTop,
           s.headerContainer,
           this.props.icon !== "closeWhite" && { backgroundColor: "#fff" },
           this.props.extraStyles
