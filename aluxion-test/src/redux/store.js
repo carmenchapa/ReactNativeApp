@@ -1,18 +1,16 @@
 import { applyMiddleware, createStore, combineReducers } from "redux";
 import thunk from "redux-thunk";
 import Unsplash from "unsplash-js/native";
+import { UPDATE, ACCESS_KEY, SECRET_KEY } from "../Constants";
 
-const accesKey =
-  "a2f508640cb62f314e0e0763594d40aab1c858a7ef796184067c537a88b276aa";
-const secretKey =
-  "4ea19af370997bcb0c580c071437661346b073b8e2f5252871e171ecc3c783ee";
+//-----** Unsplash **-----//
 
 const unsplash = new Unsplash({
-  applicationId: accesKey,
-  secret: secretKey
+  applicationId: ACCESS_KEY,
+  secret: SECRET_KEY
 });
 
-const UPDATE = "UPDATE";
+//-----** Store **-----//
 
 const middlewares = [thunk];
 
@@ -35,7 +33,7 @@ export const getRandomImages = () => {
       });
 };
 
-//Reducer
+//-----** Reducers **-----//
 
 export const imgsReducer = (state = defaultState, action) => {
   console.log("inside imgsReducer", action.payload);
@@ -48,7 +46,7 @@ export const imgsReducer = (state = defaultState, action) => {
   }
 };
 
-//Action
+//-----** Actions **-----//
 
 export const updateImages = images => ({
   type: UPDATE,
