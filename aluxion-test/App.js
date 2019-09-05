@@ -1,16 +1,19 @@
-import React from "react"
-import {StyleSheet, Text, View} from "react-native"
-import AppContainer from "./src/Navigator"
-import {AppLoading} from "expo"
-import * as Font from "expo-font"
-import Images from "./src/Images"
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import AppContainer from "./src/Navigator";
+import { AppLoading } from "expo";
+import * as Font from "expo-font";
+import Images from "./src/Images";
+import store from "./src/redux/store";
 
 export default class App extends React.Component {
   state = {
     isReady: false
-  }
+  };
 
-  _cacheResourcesAsync = (): Promise<*> => {
+  _cacheResourcesAsync = () => {
     const asyncTasks = Images.downloadAsync().concat([
       Font.loadAsync({
         MuseoLight: require("./Resources/fonts/MuseoSans-100.otf"),
@@ -24,31 +27,30 @@ export default class App extends React.Component {
         MuseoItalicBold: require("./Resources/fonts/MuseoSans-700Italic.otf"),
         MuseoItalicBlack: require("./Resources/fonts/MuseoSans-900Italic.otf")
       })
-    ])
+    ]);
 
-    return Promise.all(asyncTasks).catch(error => console.log(error))
-  }
+    return Promise.all(asyncTasks).catch(error => console.log(error));
+  };
 
   render() {
     if (!this.state.isReady) {
       return (
         <AppLoading
           startAsync={this._cacheResourcesAsync}
-          onFinish={() => this.setState({isReady: true})}
+          onFinish={() => this.setState({ isReady: true })}
           onError={console.warn}
         />
-      )
+      );
     }
 
     return (
-      <View style={styles.container}>
-        {/* <StatusBar
-	        backgroundColor={s.smoke_white.color}
-	        barStyle="dark-content"
-	      /> */}
-        <AppContainer uriPrefix="/app" />
-      </View>
-    )
+      <Provider store={store}>
+        <View style={styles.container}>
+          {/* <StatusBar backgroundColor="#fff" barStyle="dark-content" /> */}
+          <AppContainer />
+        </View>
+      </Provider>
+    );
   }
 }
 
@@ -56,4 +58,4 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   }
-})
+});
