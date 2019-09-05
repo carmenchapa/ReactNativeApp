@@ -15,6 +15,7 @@ export const SECRET_KEY =
 
 export const NAVBAR_HEIGHT = hp("14%");
 export const STATUS_BAR_HEIGHT = Platform.select({ ios: 20, android: 24 });
+export const HORIZONTAL_PADDING = 26;
 
 //-----** ActionTypes **-----//
 
