@@ -6,25 +6,20 @@ import {
 import {
   HORIZONTAL_PADDING,
   NAVBAR_HEIGHT,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
   STATUS_BAR_HEIGHT
 } from "./Constants";
 
 export const styles = StyleSheet.create({
-  flx1: {
-    flex: 1
-  },
-  centerContent: {
-    justifyContent: "center"
-  },
-  endContent: {
-    justifyContent: "flex-end"
-  },
-  startContent: {
-    justifyContent: "flex-start"
-  },
+  flx1: { flex: 1 },
+  centerContent: { justifyContent: "center" },
+  endContent: { justifyContent: "flex-end" },
+  startContent: { justifyContent: "flex-start" },
+  centerItems: { alignItems: "center" },
   fullFill: {
-    height: "100%",
-    width: "100%"
+    height: SCREEN_HEIGHT,
+    width: SCREEN_WIDTH
   },
   absoluteTop: {
     position: "absolute",
