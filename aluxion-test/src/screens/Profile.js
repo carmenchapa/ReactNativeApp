@@ -1,28 +1,20 @@
 import React from "react";
 import { FlatList, Image, Text, View } from "react-native";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { getProfileImages, profileImgsReducer } from "../redux/store";
 import Header from "../components/Header";
-import { styles as s } from "../Styles";
 import { ImageListItem } from "../components/ImageList";
-import { unsplash } from "../modules/Unsplash";
+import { styles as s } from "../Styles";
 
-export default class ProfileScreen extends React.Component {
+class ProfileScreen extends React.Component {
   state = {
     imgs: []
   };
 
   loadData() {
     const userName = this.props.navigation.state.params.item.user.username;
-    console.log(userName);
-    unsplash.users
-      .photos(userName, 1, 10)
-      .then(res => res.json())
-      .then(data => {
-        // console.log(data);
-        this.setState({ imgs: data });
-      })
-      .catch(err => {
-        console.log("Error happened during fetching!", err);
-      });
+    this.props.getProfileImages(userName);
   }
 
   close = () => {
@@ -44,6 +36,7 @@ export default class ProfileScreen extends React.Component {
   }
 
   render() {
+    console.log(" profile", this.props.profileImages.profileImages);
     const { navigation } = this.props;
     const { item } = navigation.state.params;
     return (
@@ -59,7 +52,7 @@ export default class ProfileScreen extends React.Component {
             this.flatListRef = ref;
           }}
           numColumns={2}
-          data={this.state.imgs}
+          data={this.props.profileImages.profileImages}
           keyExtractor={(item, index) => item + index}
           renderItem={({ item, index }) => (
             <ImageListItem
@@ -95,3 +88,22 @@ const ProfileHeader = props => (
     </View>
   </View>
 );
+
+const mapStateToProps = state => {
+  const { profileImages } = state;
+  return { profileImages };
+};
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      getProfileImages,
+      profileImgsReducer
+    },
+    dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProfileScreen);

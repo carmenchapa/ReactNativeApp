@@ -20,3 +20,4 @@ export const HORIZONTAL_PADDING = 26;
 //-----** ActionTypes **-----//
 
 export const UPDATE = "UPDATE";
+export const UPDATE_PROFILE = "UPDATE_PROFILE";

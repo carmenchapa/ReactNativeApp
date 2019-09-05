@@ -1,6 +1,6 @@
 import { applyMiddleware, createStore, combineReducers } from "redux";
 import thunk from "redux-thunk";
-import { UPDATE } from "../Constants";
+import { UPDATE, UPDATE_PROFILE } from "../Constants";
 import { unsplash } from "../modules/Unsplash";
 
 //-----** Store **-----//
@@ -8,7 +8,8 @@ import { unsplash } from "../modules/Unsplash";
 const middlewares = [thunk];
 
 const defaultState = {
-  images: []
+  images: [],
+  profileImages: []
 };
 
 export const getRandomImages = () => {
@@ -20,6 +21,22 @@ export const getRandomImages = () => {
       .then(data => {
         // console.log(data);
         return dispatch(updateImages(data));
+      })
+      .catch(err => {
+        console.log("Error happened during fetching!", err);
+      });
+};
+
+export const getProfileImages = userName => {
+  // const userName = this.props.navigation.state.params.item.user.username;
+  console.log(userName);
+  return dispatch =>
+    unsplash.users
+      .photos(userName, 1, 10)
+      .then(res => res.json())
+      .then(data => {
+        // console.log(data);
+        return dispatch(updateProfile(data));
       })
       .catch(err => {
         console.log("Error happened during fetching!", err);
@@ -39,6 +56,17 @@ export const imgsReducer = (state = defaultState, action) => {
   }
 };
 
+export const profileImgsReducer = (state = defaultState, action) => {
+  console.log("inside profileImgsReducer");
+  switch (action.type) {
+    case UPDATE_PROFILE:
+      return { ...state, profileImages: action.payload };
+
+    default:
+      return state;
+  }
+};
+
 //-----** Actions **-----//
 
 export const updateImages = images => ({
@@ -46,9 +74,15 @@ export const updateImages = images => ({
   payload: images
 });
 
+export const updateProfile = profileImages => ({
+  type: UPDATE_PROFILE,
+  payload: profileImages
+});
+
 const rootReducer = combineReducers({
   getRandomImages,
-  images: imgsReducer
+  images: imgsReducer,
+  profileImages: profileImgsReducer
 });
 
 export default createStore(rootReducer, applyMiddleware(...middlewares));
