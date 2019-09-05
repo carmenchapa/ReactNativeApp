@@ -28,7 +28,7 @@ export default class ProfileScreen extends React.Component {
       .photos(userName, 1, 10)
       .then(res => res.json())
       .then(data => {
-        console.log(data);
+        // console.log(data);
         this.setState({ imgs: data });
       })
       .catch(err => {
@@ -60,7 +60,7 @@ export default class ProfileScreen extends React.Component {
     return (
       <View style={(s.container, s.startContent)}>
         <View
-          style={[s.profileContainer, { marginTop: 100 }]}
+          style={[s.profileContainer, s.profileHeader]}
           onPress={() => this.props.navigation.navigate("Profile")}
         >
           <Image
@@ -95,7 +95,11 @@ export default class ProfileScreen extends React.Component {
           }}
         />
         {/*  */}
-        <Header icon="close" onPress={() => this.close()} />
+        <Header
+          icon="close"
+          onPress={() => this.close()}
+          extraStyles={s.header}
+        />
       </View>
     );
   }
