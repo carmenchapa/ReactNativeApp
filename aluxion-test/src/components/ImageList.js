@@ -10,12 +10,10 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { getPhotoTitle } from "../helperFunctions";
 import { styles as s } from "../Styles";
-// import console = require("console");
 
 const isOdd = num => num % 2;
 
 export const ImageListItem = props => {
-  console.log(props.item);
   return (
     <TouchableOpacity onPress={props.navigate}>
       <ImageBackground
