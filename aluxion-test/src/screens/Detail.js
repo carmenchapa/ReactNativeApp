@@ -8,15 +8,18 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { getRandomImages, imgsReducer } from "../redux/store";
 import { LinearGradient } from "expo-linear-gradient";
+import Header from "../components/Header";
 import { getPhotoTitle } from "../helperFunctions";
 import { styles as s } from "../Styles";
-import Header from "../components/Header";
 
 const opacityMin = 0;
 const translateYMin = 60;
 
-export default class DetailScreen extends React.Component {
+class DetailScreen extends React.Component {
   state = {
     infoVisible: false,
     opacityValue: new Animated.Value(opacityMin),
@@ -115,3 +118,22 @@ export default class DetailScreen extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  const { images } = state;
+  return { images };
+};
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      getImages: getRandomImages,
+      imgsReducer
+    },
+    dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DetailScreen);
