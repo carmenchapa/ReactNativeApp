@@ -59,21 +59,11 @@ export default class ProfileScreen extends React.Component {
     const { item } = navigation.state.params;
     return (
       <View style={(s.container, s.startContent)}>
-        <View
-          style={[s.profileContainer, s.profileHeader]}
-          onPress={() => this.props.navigation.navigate("Profile")}
-        >
-          <Image
-            style={s.profileImage}
-            source={{ uri: item.user.profile_image.medium }}
-          />
-          <View style={{ paddingLeft: 12, justifyContent: "center" }}>
-            <Text style={s.profileUserName}>{item.user.name}</Text>
-            <View style={s.profileDescription}>
-              <Text style={s.profileDescription}>{item.user.bio}</Text>
-            </View>
-          </View>
-        </View>
+        <ProfileHeader
+          image={item.user.profile_image.medium}
+          name={item.user.name}
+          bio={item.user.bio}
+        />
 
         <FlatList
           ref={ref => {
@@ -94,7 +84,7 @@ export default class ProfileScreen extends React.Component {
             marginHorizontal: 26
           }}
         />
-        {/*  */}
+
         <Header
           icon="close"
           onPress={() => this.close()}
@@ -104,3 +94,15 @@ export default class ProfileScreen extends React.Component {
     );
   }
 }
+
+const ProfileHeader = props => (
+  <View style={[s.profileContainer, s.profileHeader]}>
+    <Image style={s.profileImage} source={{ uri: props.image }} />
+    <View style={{ paddingLeft: 12, justifyContent: "center" }}>
+      <Text style={s.profileUserName}>{props.name}</Text>
+      <View style={s.profileDescription}>
+        <Text style={s.profileDescription}>{props.bio}</Text>
+      </View>
+    </View>
+  </View>
+);
