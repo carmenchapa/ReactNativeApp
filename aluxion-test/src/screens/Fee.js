@@ -1,11 +1,12 @@
 import React from "react";
 import { Animated, FlatList, View } from "react-native";
-import { styles as s } from "../Styles";
-import Header from "../components/Header";
-import { ImageListItem } from "../components/ImageList";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getRandomImages, imgsReducer } from "../redux/store";
+import Header from "../components/Header";
+import { ImageListItem } from "../components/ImageList";
+import { styles as s } from "../Styles";
+
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { NAVBAR_HEIGHT, STATUS_BAR_HEIGHT } from "../Constants";
 
@@ -79,7 +80,7 @@ class FeeScreen extends React.Component {
   };
 
   render() {
-    console.log("props.images", this.props.images, this.props.images != null);
+    // console.log("props.images", this.props.images, this.props.images != null);
     const { navigation } = this.props;
     const { clampedScroll } = this.state;
 
