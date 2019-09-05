@@ -1,6 +1,7 @@
 import React from "react";
 import {
   Animated,
+  Easing,
   Image,
   ImageBackground,
   Text,
@@ -14,27 +15,35 @@ import { styles as s } from "../Styles";
 import Header from "../components/Header";
 
 const opacityMin = 0;
-const translateYMin = 300;
+const translateYMin = 60;
 
 export default class DetailScreen extends React.Component {
   state = {
     infoVisible: false,
     opacityValue: new Animated.Value(opacityMin),
-    translateXValue: new Animated.Value(translateYMin)
+    translateYValue: new Animated.Value(translateYMin)
   };
 
   show(props) {
     this.setState({ infoVisible: true });
     Animated.parallel([
-      Animated.timing(this.state.opacityValue, { toValue: 1 }),
-      Animated.timing(this.state.translateXValue, { toValue: 0 })
+      Animated.timing(this.state.opacityValue, {
+        toValue: 1,
+        duration: 600,
+        easing: Easing.in()
+      }),
+      Animated.timing(this.state.translateYValue, {
+        toValue: 0,
+        duration: 500,
+        easing: Easing.in()
+      })
     ]).start();
   }
 
   hide(props) {
     Animated.parallel([
-      Animated.timing(this.state.opacityValue, { toValue: 0 }),
-      Animated.timing(this.state.translateXValue, {
+      Animated.timing(this.state.opacityValue, { toValue: opacityMin }),
+      Animated.timing(this.state.translateYValue, {
         toValue: translateYMin,
         duration: 0
       })
@@ -57,10 +66,10 @@ export default class DetailScreen extends React.Component {
     const { infoVisible } = this.state;
     const animatedStyle = {
       opacity: this.state.opacityValue,
-      transform: [{ translateX: this.state.translateXValue }]
+      transform: [{ translateY: this.state.translateYValue }]
     };
 
-    console.log(image);
+    // console.log(image);
     return (
       <TouchableOpacity
         activeOpacity={0.9}
