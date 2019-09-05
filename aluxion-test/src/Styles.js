@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
   },
   headerContainer: {
     justifyContent: "center",
-    marginHorizontal: 26,
+    marginHorizontal: HORIZONTAL_PADDING,
     paddingTop: hp("4%")
   },
   header: {
@@ -51,7 +51,6 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     lineHeight: 28
   },
-
   listItem: {
     width: wp("40%"),
     height: wp("55%"),
@@ -140,7 +139,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 14,
     paddingBottom: 8,
-    paddingRight: 25,
+    paddingRight: HORIZONTAL_PADDING,
     color: "#000"
   }
 });
