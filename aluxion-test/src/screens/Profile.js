@@ -1,7 +1,6 @@
 import React from "react";
-import { FlatList, Image, StyleSheet, Text, View } from "react-native";
+import { FlatList, Image, Text, View } from "react-native";
 import Header from "../components/Header";
-import { getPhotoTitle } from "../helperFunctions";
 import { styles as s } from "../Styles";
 import { ImageListItem } from "../components/ImageList";
 import Unsplash from "unsplash-js/native";
