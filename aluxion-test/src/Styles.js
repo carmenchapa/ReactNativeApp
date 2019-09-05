@@ -6,8 +6,10 @@ import {
 import { NAVBAR_HEIGHT, STATUS_BAR_HEIGHT } from "./Constants";
 
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  flx1: {
+    flex: 1
+  },
+  centerContent: {
     justifyContent: "center"
   },
   endContent: {

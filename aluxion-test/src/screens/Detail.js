@@ -76,7 +76,7 @@ export default class DetailScreen extends React.Component {
         onPress={() => this.show()}
       >
         <ImageBackground
-          style={[s.container, s.endContent]}
+          style={[s.flx1, s.endContent]}
           source={{ uri: image.urls.regular }}
         >
           <LinearGradient

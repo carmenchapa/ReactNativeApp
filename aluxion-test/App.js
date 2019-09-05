@@ -1,12 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
 import AppContainer from "./src/Navigator";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import Images from "./src/Images";
 import store from "./src/redux/store";
+import { styles as s } from "./src/Styles";
 
 export default class App extends React.Component {
   state = {
@@ -45,7 +45,7 @@ export default class App extends React.Component {
 
     return (
       <Provider store={store}>
-        <View style={styles.container}>
+        <View style={s.flx1}>
           {/* <StatusBar backgroundColor="#fff" barStyle="dark-content" /> */}
           <AppContainer />
         </View>
@@ -53,9 +53,3 @@ export default class App extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-});

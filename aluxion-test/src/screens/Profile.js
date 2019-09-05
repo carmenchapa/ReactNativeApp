@@ -58,7 +58,7 @@ export default class ProfileScreen extends React.Component {
     const { navigation } = this.props;
     const { item } = navigation.state.params;
     return (
-      <View style={(s.container, s.startContent)}>
+      <View style={(s.flx1, s.startContent)}>
         <ProfileHeader
           image={item.user.profile_image.medium}
           name={item.user.name}
