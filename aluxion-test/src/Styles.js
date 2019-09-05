@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import { NAVBAR_HEIGHT, STATUS_BAR_HEIGHT } from "./Constants";
 
 export const styles = StyleSheet.create({
   container: {
@@ -28,7 +29,10 @@ export const styles = StyleSheet.create({
     marginLeft: 26,
     marginRight: 26,
     paddingTop: hp("4%")
-    // paddingBottom: 12
+  },
+  header: {
+    height: NAVBAR_HEIGHT,
+    paddingTop: STATUS_BAR_HEIGHT
   },
   iconsContainer: {
     flexDirection: "row",
@@ -114,7 +118,7 @@ export const styles = StyleSheet.create({
     borderRadius: 20
   },
   profileHeader: {
-    marginTop: hp("12%")
+    marginTop: hp("11%")
   },
   profileImage: {
     width: 64,
