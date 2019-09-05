@@ -21,13 +21,14 @@ export const styles = StyleSheet.create({
   },
   headerContainer: {
     position: "absolute",
+    justifyContent: "center",
     top: 0,
     left: 0,
     right: 0,
     marginLeft: 26,
-    paddingTop: 56,
     marginRight: 26,
-    paddingBottom: 26
+    paddingTop: hp("4%")
+    // paddingBottom: 12
   },
   iconsContainer: {
     flexDirection: "row",
@@ -111,6 +112,9 @@ export const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20
+  },
+  profileHeader: {
+    marginTop: hp("12%")
   },
   profileImage: {
     width: 64,
