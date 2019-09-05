@@ -3,7 +3,11 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
-import { NAVBAR_HEIGHT, STATUS_BAR_HEIGHT } from "./Constants";
+import {
+  HORIZONTAL_PADDING,
+  NAVBAR_HEIGHT,
+  STATUS_BAR_HEIGHT
+} from "./Constants";
 
 export const styles = StyleSheet.create({
   flx1: {
@@ -22,14 +26,15 @@ export const styles = StyleSheet.create({
     height: "100%",
     width: "100%"
   },
-  headerContainer: {
+  absoluteTop: {
     position: "absolute",
-    justifyContent: "center",
     top: 0,
     left: 0,
-    right: 0,
-    marginLeft: 26,
-    marginRight: 26,
+    right: 0
+  },
+  headerContainer: {
+    justifyContent: "center",
+    marginHorizontal: 26,
     paddingTop: hp("4%")
   },
   header: {
@@ -46,12 +51,7 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     lineHeight: 28
   },
-  gradient: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0
-  },
+
   listItem: {
     width: wp("40%"),
     height: wp("55%"),
@@ -80,7 +80,7 @@ export const styles = StyleSheet.create({
     color: "#fff"
   },
   detailInfo: {
-    padding: 26
+    padding: HORIZONTAL_PADDING
   },
   detailPhotoTitle: {
     fontFamily: "MuseoMedium",
@@ -110,8 +110,8 @@ export const styles = StyleSheet.create({
   profileContainer: {
     flexDirection: "row",
     paddingTop: 26,
-    paddingLeft: 25,
-    marginRight: 25,
+    paddingLeft: HORIZONTAL_PADDING,
+    marginRight: HORIZONTAL_PADDING,
     marginBottom: 30
   },
   userImage: {
