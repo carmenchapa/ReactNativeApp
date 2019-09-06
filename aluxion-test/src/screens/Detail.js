@@ -22,56 +22,15 @@ const opacityMin = 0;
 const translateYMin = 60;
 
 class ImageDetail extends React.Component {
-  state = {
-    infoVisible: false,
-    opacityValue: new Animated.Value(opacityMin),
-    translateYValue: new Animated.Value(translateYMin)
-  };
-
-  show(props) {
-    console.log("show");
-    this.setState({ infoVisible: true });
-    Animated.parallel([
-      Animated.timing(this.state.opacityValue, {
-        toValue: 1,
-        duration: 600,
-        easing: Easing.in()
-      }),
-      Animated.timing(this.state.translateYValue, {
-        toValue: 0,
-        duration: 500,
-        easing: Easing.in()
-      })
-    ]).start();
-  }
-
-  hide(props) {
-    Animated.parallel([
-      Animated.timing(this.state.opacityValue, { toValue: opacityMin }),
-      Animated.timing(this.state.translateYValue, {
-        toValue: translateYMin,
-        duration: 0
-      })
-    ]).start();
-    this.setState({ infoVisible: false });
-  }
-
   goProfile(image) {
     this.props.goToProfile();
-    // this.props.navigation.navigate("Profile", { item: image });
-    this.hide();
   }
 
-  // close(image) {
-  //   this.hide();
-  //   this.props.navigation.goBack();
-  // }
-
   render() {
-    const { infoVisible } = this.state;
+    const { infoVisible } = this.props;
     const animatedStyle = {
-      opacity: this.state.opacityValue,
-      transform: [{ translateY: this.state.translateYValue }]
+      opacity: this.props.opacityValue,
+      transform: [{ translateY: this.props.translateYValue }]
     };
     return (
       <View style={s.flx1}>
@@ -115,7 +74,7 @@ class ImageDetail extends React.Component {
           <TouchableOpacity
             style={s.profileTouchable}
             activeOpacity={0.9}
-            onPress={() => this.show()}
+            onPress={() => this.props.show()}
           >
             <View style={s.flx1} />
           </TouchableOpacity>
@@ -128,12 +87,41 @@ class ImageDetail extends React.Component {
 class DetailScreen extends React.Component {
   position = new Animated.ValueXY();
   state = {
-    currentIndex: this.props.navigation.state.params.index
+    currentIndex: this.props.navigation.state.params.index,
+    infoVisible: false,
+    opacityValue: new Animated.Value(opacityMin),
+    translateYValue: new Animated.Value(translateYMin)
   };
 
-  close(image) {
-    // this.hide();
-    this.props.navigation.goBack();
+  show = () => {
+    this.setState({ infoVisible: true });
+    Animated.parallel([
+      Animated.timing(this.state.opacityValue, {
+        toValue: 1,
+        duration: 600,
+        easing: Easing.in()
+      }),
+      Animated.timing(this.state.translateYValue, {
+        toValue: 0,
+        duration: 500,
+        easing: Easing.in()
+      })
+    ]).start();
+  };
+
+  hide = func => {
+    Animated.parallel([
+      Animated.timing(this.state.opacityValue, { toValue: opacityMin }),
+      Animated.timing(this.state.translateYValue, {
+        toValue: translateYMin,
+        duration: 0
+      })
+    ]).start(func);
+    this.setState({ infoVisible: false });
+  };
+
+  close() {
+    this.hide(() => this.props.navigation.goBack());
   }
 
   componentDidMount() {
@@ -154,11 +142,6 @@ class DetailScreen extends React.Component {
       prevProps.navigation.state.params.index !==
       this.props.navigation.state.params.index
     ) {
-      console.log(
-        "index",
-        this.props.navigation.state.params.index,
-        this.state.currentIndex
-      );
       this.setState({ currentIndex: this.props.navigation.state.params.index });
       this.flatListRef.scrollToIndex({
         index: this.props.navigation.state.params.index,
@@ -168,6 +151,7 @@ class DetailScreen extends React.Component {
   }
 
   render() {
+    console.log("render", this.state.infoVisible);
     const data =
       this.props.navigation.state.params.data === "random"
         ? this.props.images.images
@@ -175,19 +159,26 @@ class DetailScreen extends React.Component {
     return (
       <View style={s.flx1}>
         <FlatList
-          ref={ref => {
-            this.flatListRef = ref;
-          }}
+          ref={ref => (this.flatListRef = ref)}
           data={data}
           pagingEnabled
           keyExtractor={(item, index) => item + index}
           renderItem={({ item, index }) => (
             <View style={s.fullFill}>
               <ImageDetail
+                ref={ref => (this.ImageDetailtRef = ref)}
+                closed={this.state.closed}
                 currentImage={item}
                 goToProfile={() =>
-                  this.props.navigation.navigate("Profile", { item: item })
+                  this.hide(() =>
+                    this.props.navigation.navigate("Profile", { item: item })
+                  )
                 }
+                // hide={func => this.hide(func)}
+                show={this.show}
+                infoVisible={this.state.infoVisible}
+                opacityValue={this.state.opacityValue}
+                translateYValue={this.state.translateYValue}
               />
             </View>
           )}
