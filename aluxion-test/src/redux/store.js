@@ -28,8 +28,6 @@ export const getRandomImages = () => {
 };
 
 export const getProfileImages = userName => {
-  // const userName = this.props.navigation.state.params.item.user.username;
-  console.log(userName);
   return dispatch =>
     unsplash.users
       .photos(userName, 1, 10)
@@ -79,10 +77,14 @@ export const updateProfile = profileImages => ({
   payload: profileImages
 });
 
+//-----** Combine Reducers **-----//
+
 const rootReducer = combineReducers({
   getRandomImages,
   images: imgsReducer,
   profileImages: profileImgsReducer
 });
+
+//-----** Create Store **-----//
 
 export default createStore(rootReducer, applyMiddleware(...middlewares));

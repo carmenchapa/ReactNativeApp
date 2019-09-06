@@ -12,6 +12,7 @@ import {
 } from "./Constants";
 
 export const styles = StyleSheet.create({
+  //-----** General styles **-----//
   flx1: { flex: 1 },
   centerContent: { justifyContent: "center" },
   endContent: { justifyContent: "flex-end" },
@@ -27,6 +28,7 @@ export const styles = StyleSheet.create({
     left: 0,
     right: 0
   },
+  //-----** Header **-----//
   headerContainer: {
     justifyContent: "center",
     marginHorizontal: HORIZONTAL_PADDING,
@@ -41,6 +43,7 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center"
   },
+  //-----** FlatList **-----//
   pageTitle: {
     fontFamily: "MuseoBlack",
     fontSize: 24,
@@ -73,6 +76,7 @@ export const styles = StyleSheet.create({
     lineHeight: 9,
     color: "#fff"
   },
+  //-----** Detail **-----//
   detailInfo: {
     padding: HORIZONTAL_PADDING
   },
@@ -101,12 +105,20 @@ export const styles = StyleSheet.create({
     lineHeight: 12,
     color: "#fff"
   },
+  //-----** Profile **-----//
   profileContainer: {
     flexDirection: "row",
     paddingTop: 26,
     paddingLeft: HORIZONTAL_PADDING,
     marginRight: HORIZONTAL_PADDING,
     marginBottom: 30
+  },
+  profileTouchable: {
+    position: "absolute",
+    top: 90,
+    bottom: 90,
+    left: 90,
+    right: 90
   },
   userImage: {
     width: 40,
@@ -129,7 +141,6 @@ export const styles = StyleSheet.create({
     color: "#000"
   },
   profileDescription: {
-    // flex: 1,
     fontFamily: "MuseoLight",
     fontSize: 12,
     lineHeight: 14,
