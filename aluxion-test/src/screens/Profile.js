@@ -8,10 +8,6 @@ import { ImageListItem } from "../components/ImageList";
 import { styles as s } from "../Styles";
 
 class ProfileScreen extends React.Component {
-  state = {
-    imgs: []
-  };
-
   loadData() {
     const userName = this.props.navigation.state.params.item.user.username;
     this.props.getProfileImages(userName);
