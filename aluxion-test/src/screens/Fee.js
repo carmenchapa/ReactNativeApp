@@ -80,7 +80,6 @@ class FeeScreen extends React.Component {
   };
 
   render() {
-    // console.log("props.images", this.props.images, this.props.images != null);
     const { navigation } = this.props;
     const { clampedScroll } = this.state;
 
@@ -94,7 +93,6 @@ class FeeScreen extends React.Component {
       outputRange: [1, 0],
       extrapolate: "clamp"
     });
-    console.log(" navbarTranslate", navbarTranslate);
     return (
       <View style={[s.flx1, s.centerContent]}>
         <AnimatedFlatList
