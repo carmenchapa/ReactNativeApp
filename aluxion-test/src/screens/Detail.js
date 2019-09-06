@@ -2,9 +2,9 @@ import React from "react";
 import {
   Animated,
   Easing,
+  FlatList,
   Image,
   ImageBackground,
-  PanResponder,
   Text,
   TouchableOpacity,
   View
@@ -23,7 +23,6 @@ const translateYMin = 60;
 
 class ImageDetail extends React.Component {
   state = {
-    // currentIndex: this.props.navigation.state.params.index,
     infoVisible: false,
     opacityValue: new Animated.Value(opacityMin),
     translateYValue: new Animated.Value(translateYMin)
@@ -74,59 +73,54 @@ class ImageDetail extends React.Component {
       opacity: this.state.opacityValue,
       transform: [{ translateY: this.state.translateYValue }]
     };
-
     return (
-      <ImageBackground
-        style={[s.flx1, s.endContent, { resizeMode: "cover" }]}
-        source={{ uri: this.props.currentImage.urls.regular }}
-      >
-        <LinearGradient
-          colors={["transparent", "rgba(0,0,0,0.9)"]}
-          start={[0.5, 0.7]}
-          style={[s.absoluteTop, s.fullFill]}
-        />
-
-        {infoVisible && (
-          <Animated.View style={[s.detailInfo, animatedStyle]}>
-            <Text style={s.detailPhotoTitle}>
-              {getPhotoTitle(this.props.currentImage)}
-            </Text>
-            <Text
-              style={s.detailLikes}
-            >{`${this.props.currentImage.likes} likes`}</Text>
-            <TouchableOpacity
-              style={s.profileContainer}
-              onPress={() => this.goProfile(this.props.currentImage)}
-            >
-              <Image
-                style={s.userImage}
-                source={{
-                  uri: this.props.currentImage.user.profile_image.medium
-                }}
-              />
-              <View style={{ paddingLeft: 8, justifyContent: "center" }}>
-                <Text style={s.detailUserName}>
-                  {this.props.currentImage.user.name}
-                </Text>
-                <Text style={s.viewProfile}>View profile</Text>
-              </View>
-            </TouchableOpacity>
-          </Animated.View>
-        )}
-        <TouchableOpacity
-          style={s.profileTouchable}
-          activeOpacity={0.9}
-          onPress={() => this.show()}
+      <View style={s.flx1}>
+        <ImageBackground
+          style={[s.flx1, s.endContent, { resizeMode: "cover" }]}
+          source={{ uri: this.props.currentImage.urls.regular }}
         >
-          <View style={s.flx1} />
-        </TouchableOpacity>
+          <LinearGradient
+            colors={["transparent", "rgba(0,0,0,0.9)"]}
+            start={[0.5, 0.7]}
+            style={[s.absoluteTop, s.fullFill]}
+          />
 
-        {/* <Header
-          icon="closeWhite"
-          onPress={() => this.close()}
-          extraStyles={s.header}
-        /> */}
-      </ImageBackground>
+          {infoVisible && (
+            <Animated.View style={[s.detailInfo, animatedStyle]}>
+              <Text style={s.detailPhotoTitle}>
+                {getPhotoTitle(this.props.currentImage)}
+              </Text>
+              <Text
+                style={s.detailLikes}
+              >{`${this.props.currentImage.likes} likes`}</Text>
+              <TouchableOpacity
+                style={s.profileContainer}
+                onPress={() => this.goProfile(this.props.currentImage)}
+              >
+                <Image
+                  style={s.userImage}
+                  source={{
+                    uri: this.props.currentImage.user.profile_image.medium
+                  }}
+                />
+                <View style={{ paddingLeft: 8, justifyContent: "center" }}>
+                  <Text style={s.detailUserName}>
+                    {this.props.currentImage.user.name}
+                  </Text>
+                  <Text style={s.viewProfile}>View profile</Text>
+                </View>
+              </TouchableOpacity>
+            </Animated.View>
+          )}
+          <TouchableOpacity
+            style={s.profileTouchable}
+            activeOpacity={0.9}
+            onPress={() => this.show()}
+          >
+            <View style={s.flx1} />
+          </TouchableOpacity>
+        </ImageBackground>
+      </View>
     );
   }
 }
@@ -137,123 +131,75 @@ class DetailScreen extends React.Component {
     currentIndex: this.props.navigation.state.params.index
   };
 
-  rotate = this.position.x.interpolate({
-    inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-    outputRange: ["-4deg", "0deg", "4deg"],
-    extrapolate: "clamp"
-  });
-
-  rotateAndTranslate = {
-    transform: [
-      { rotate: this.rotate },
-      ...this.position.getTranslateTransform()
-    ]
-  };
-
-  nextCardOpacity = this.position.x.interpolate({
-    inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-    outputRange: [1, 0, 1],
-    extrapolate: "clamp"
-  });
-  nextCardScale = this.position.x.interpolate({
-    inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-    outputRange: [1, 0.8, 1],
-    extrapolate: "clamp"
-  });
-
   close(image) {
     // this.hide();
     this.props.navigation.goBack();
   }
 
-  componentWillMount() {
-    this.PanResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onPanResponderMove: (evt, gestureState) => {
-        this.position.setValue({ x: gestureState.dx, y: 0 });
-      },
-      onPanResponderRelease: (evt, gestureState) => {
-        if (gestureState.dx > 120) {
-          console.log(">120");
-          Animated.spring(this.position, {
-            toValue: { x: SCREEN_WIDTH + 100, y: 0 }
-          }).start(() => {
-            this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
-              this.position.setValue({ x: 0, y: 0 });
-            });
-          });
-        } else if (gestureState.dx < -120) {
-          console.log("<120");
-          Animated.spring(this.position, {
-            toValue: { x: -SCREEN_WIDTH - 100, y: 0 }
-          }).start(() => {
-            this.setState({ currentIndex: this.state.currentIndex - 1 }, () => {
-              this.position.setValue({ x: 0, y: 0 });
-            });
-          });
-        } else {
-          console.log("else");
-          Animated.spring(this.position, {
-            toValue: { x: 0, y: 0 },
-            friction: 4
-          }).start();
-        }
-      }
+  componentDidMount() {
+    console.log(
+      "index",
+      this.props.navigation.state.params.index,
+      this.state.currentIndex
+    );
+    this.setState({ currentIndex: this.props.navigation.state.params.index });
+    this.flatListRef.scrollToIndex({
+      index: this.props.navigation.state.params.index,
+      animated: false
     });
   }
 
-  renderImages = () => {
-    return this.props.images.images
-      .map((item, i) => {
-        // if (i < this.state.currentIndex) {
-        //   return null;
-        // } else
-        if (i == this.state.currentIndex) {
-          return (
-            <Animated.View
-              {...this.PanResponder.panHandlers}
-              key={i}
-              style={[
-                this.rotateAndTranslate,
-                s.fullFill,
-                { position: "absolute" }
-              ]}
-            >
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.navigation.state.params.index !==
+      this.props.navigation.state.params.index
+    ) {
+      console.log(
+        "index",
+        this.props.navigation.state.params.index,
+        this.state.currentIndex
+      );
+      this.setState({ currentIndex: this.props.navigation.state.params.index });
+      this.flatListRef.scrollToIndex({
+        index: this.props.navigation.state.params.index,
+        animated: false
+      });
+    }
+  }
+
+  render() {
+    const data =
+      this.props.navigation.state.params.data === "random"
+        ? this.props.images.images
+        : this.props.profileImages.profileImages;
+    return (
+      <View style={s.flx1}>
+        <FlatList
+          ref={ref => {
+            this.flatListRef = ref;
+          }}
+          data={data}
+          pagingEnabled
+          keyExtractor={(item, index) => item + index}
+          renderItem={({ item, index }) => (
+            <View style={s.fullFill}>
               <ImageDetail
                 currentImage={item}
                 goToProfile={() =>
                   this.props.navigation.navigate("Profile", { item: item })
                 }
               />
-            </Animated.View>
-          );
-        } else {
-          return (
-            <Animated.View
-              key={i}
-              style={[
-                s.fullFill,
-                {
-                  opacity: this.nextCardOpacity,
-                  transform: [{ scale: this.nextCardScale }]
-                }
-              ]}
-            >
-              <ImageBackground
-                style={[s.flx1, s.endContent, { resizeMode: "cover" }]}
-                source={{ uri: item.urls.regular }}
-              />
-            </Animated.View>
-          );
-        }
-      })
-      .reverse();
-  };
-
-  render() {
-    return (
-      <View style={s.flx1}>
-        {this.renderImages()}
+            </View>
+          )}
+          horizontal
+          initialScrollIndex={this.state.currentIndex}
+          getItemLayout={(data, index) => ({
+            length: SCREEN_WIDTH,
+            offset: SCREEN_WIDTH * index,
+            index
+          })}
+          decelerationRate="fast"
+        />
         <Header
           icon="closeWhite"
           onPress={() => this.close()}
