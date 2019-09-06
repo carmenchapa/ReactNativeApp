@@ -13,7 +13,6 @@ const defaultState = {
 };
 
 export const getRandomImages = () => {
-  console.log("inside getRandomImages");
   return dispatch =>
     unsplash.photos
       .listPhotos(Math.floor(Math.random() * 100), 16, "random")
@@ -44,7 +43,6 @@ export const getProfileImages = userName => {
 //-----** Reducers **-----//
 
 export const imgsReducer = (state = defaultState, action) => {
-  console.log("inside imgsReducer");
   switch (action.type) {
     case UPDATE:
       return { ...state, images: action.payload };
@@ -55,7 +53,6 @@ export const imgsReducer = (state = defaultState, action) => {
 };
 
 export const profileImgsReducer = (state = defaultState, action) => {
-  console.log("inside profileImgsReducer");
   switch (action.type) {
     case UPDATE_PROFILE:
       return { ...state, profileImages: action.payload };
