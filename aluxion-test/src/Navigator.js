@@ -13,8 +13,6 @@ const RootNavigator = createDrawerNavigator(
       navigationOptions: ({ navigation }) => ({
         title: `Fee`,
         drawerLabel: "Discover"
-
-        // drawerLabel: () => null
       })
     },
     Detail: {

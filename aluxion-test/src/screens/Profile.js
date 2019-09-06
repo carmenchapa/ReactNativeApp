@@ -75,7 +75,7 @@ class ProfileScreen extends React.Component {
 const ProfileHeader = props => (
   <View style={[s.profileContainer, s.profileHeader]}>
     <Image style={s.profileImage} source={{ uri: props.image }} />
-    <View style={{ paddingLeft: 12, justifyContent: "center" }}>
+    <View style={s.profileHeaderText}>
       <Text style={s.profileUserName}>{props.name}</Text>
       <View style={s.profileDescription}>
         <Text style={s.profileDescription}>{props.bio}</Text>

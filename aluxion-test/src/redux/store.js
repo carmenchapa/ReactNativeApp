@@ -12,15 +12,14 @@ const defaultState = {
   profileImages: []
 };
 
+//-----** Api Calls **-----//
+
 export const getRandomImages = () => {
   return dispatch =>
     unsplash.photos
       .listPhotos(Math.floor(Math.random() * 100), 16, "random")
       .then(res => res.json())
-      .then(data => {
-        // console.log(data);
-        return dispatch(updateImages(data));
-      })
+      .then(data => dispatch(updateImages(data)))
       .catch(err => {
         console.log("Error happened during fetching!", err);
       });
@@ -31,10 +30,7 @@ export const getProfileImages = userName => {
     unsplash.users
       .photos(userName, 1, 10)
       .then(res => res.json())
-      .then(data => {
-        // console.log(data);
-        return dispatch(updateProfile(data));
-      })
+      .then(data => dispatch(updateProfile(data)))
       .catch(err => {
         console.log("Error happened during fetching!", err);
       });

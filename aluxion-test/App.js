@@ -46,7 +46,6 @@ export default class App extends React.Component {
     return (
       <Provider store={store}>
         <View style={s.flx1}>
-          {/* <StatusBar backgroundColor="#fff" barStyle="dark-content" /> */}
           <AppContainer />
         </View>
       </Provider>

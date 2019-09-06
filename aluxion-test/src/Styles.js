@@ -128,6 +128,10 @@ export const styles = StyleSheet.create({
   profileHeader: {
     marginTop: hp("11%")
   },
+  profileHeaderText: {
+    paddingLeft: 12,
+    justifyContent: "center"
+  },
   profileImage: {
     width: 64,
     height: 64,
