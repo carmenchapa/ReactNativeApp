@@ -11,7 +11,9 @@ const RootNavigator = createDrawerNavigator(
       screen: FeeScreen,
 
       navigationOptions: ({ navigation }) => ({
-        title: `Fee`
+        title: `Fee`,
+        drawerLabel: "Discover"
+
         // drawerLabel: () => null
       })
     },
@@ -36,7 +38,12 @@ const RootNavigator = createDrawerNavigator(
     initialRouteName: "Fee",
     gesturesEnabled: false,
     headerMode: "none",
-    cardStyle: { backgroundColor: "#fff" }
+    cardStyle: { backgroundColor: "#fff" },
+    contentOptions: {
+      activeTintColor: "#000",
+      activeBackgroundColor: "#fff",
+      labelStyle: { fontFamily: "MuseoBlack", fontSize: 20 }
+    }
   }
 );
 

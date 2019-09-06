@@ -88,7 +88,6 @@ const ImageInfo = props => (
 );
 
 class DetailScreen extends React.Component {
-  position = new Animated.ValueXY();
   state = {
     currentIndex: this.props.navigation.state.params.index,
     infoVisible: false,
