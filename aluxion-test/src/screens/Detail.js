@@ -21,49 +21,43 @@ import { SCREEN_WIDTH } from "../Constants";
 const opacityMin = 0;
 const translateYMin = 60;
 
-class ImageDetail extends React.Component {
-  goProfile(image) {
-    this.props.goToProfile();
-  }
+const ImageDetail = props => {
+  const { infoVisible, currentImage, goToProfile } = props;
+  const animatedStyle = {
+    opacity: props.opacityValue,
+    transform: [{ translateY: props.translateYValue }]
+  };
+  return (
+    <View style={s.flx1}>
+      <ImageBackground
+        style={[s.flx1, s.endContent, { resizeMode: "cover" }]}
+        source={{ uri: currentImage.urls.regular }}
+      >
+        <LinearGradient
+          colors={["transparent", "rgba(0,0,0,0.9)"]}
+          start={[0.5, 0.7]}
+          style={[s.absoluteTop, s.fullFill]}
+        />
 
-  render() {
-    const { infoVisible, currentImage } = this.props;
-    const animatedStyle = {
-      opacity: this.props.opacityValue,
-      transform: [{ translateY: this.props.translateYValue }]
-    };
-    return (
-      <View style={s.flx1}>
-        <ImageBackground
-          style={[s.flx1, s.endContent, { resizeMode: "cover" }]}
-          source={{ uri: this.props.currentImage.urls.regular }}
-        >
-          <LinearGradient
-            colors={["transparent", "rgba(0,0,0,0.9)"]}
-            start={[0.5, 0.7]}
-            style={[s.absoluteTop, s.fullFill]}
+        {infoVisible && (
+          <ImageInfo
+            image={currentImage}
+            animatedStyle={animatedStyle}
+            goProfile={() => goToProfile(currentImage)}
           />
+        )}
 
-          {infoVisible && (
-            <ImageInfo
-              image={currentImage}
-              animatedStyle={animatedStyle}
-              goProfile={() => this.goProfile(currentImage)}
-            />
-          )}
-
-          <TouchableOpacity
-            style={s.profileTouchable}
-            activeOpacity={0.9}
-            onPress={() => this.props.show()}
-          >
-            <View style={s.flx1} />
-          </TouchableOpacity>
-        </ImageBackground>
-      </View>
-    );
-  }
-}
+        <TouchableOpacity
+          style={s.profileTouchable}
+          activeOpacity={0.9}
+          onPress={() => props.show()}
+        >
+          <View style={s.flx1} />
+        </TouchableOpacity>
+      </ImageBackground>
+    </View>
+  );
+};
 
 const ImageInfo = props => (
   <Animated.View style={[s.detailInfo, props.animatedStyle]}>
@@ -126,15 +120,15 @@ class DetailScreen extends React.Component {
     this.hide(() => this.props.navigation.goBack());
   }
 
+  goToProfile = item => {
+    this.hide(() => this.props.navigation.navigate("Profile", { item }));
+  };
+
   componentDidMount() {
-    console.log(
-      "index",
-      this.props.navigation.state.params.index,
-      this.state.currentIndex
-    );
-    this.setState({ currentIndex: this.props.navigation.state.params.index });
+    const { index } = this.props.navigation.state.params;
+    this.setState({ currentIndex: index });
     this.flatListRef.scrollToIndex({
-      index: this.props.navigation.state.params.index,
+      index: index,
       animated: false
     });
   }
@@ -144,20 +138,27 @@ class DetailScreen extends React.Component {
       prevProps.navigation.state.params.index !==
       this.props.navigation.state.params.index
     ) {
-      this.setState({ currentIndex: this.props.navigation.state.params.index });
+      const { index } = this.props.navigation.state.params;
+      this.setState({ currentIndex: index });
       this.flatListRef.scrollToIndex({
-        index: this.props.navigation.state.params.index,
+        index: index,
         animated: false
       });
     }
   }
 
   render() {
-    console.log("render", this.state.infoVisible);
+    const { navigation, images, profileImages } = this.props;
+    const {
+      infoVisible,
+      opacityValue,
+      translateYValue,
+      currentIndex
+    } = this.state;
     const data =
-      this.props.navigation.state.params.data === "random"
-        ? this.props.images.images
-        : this.props.profileImages.profileImages;
+      navigation.state.params.data === "random"
+        ? images.images
+        : profileImages.profileImages;
     return (
       <View style={s.flx1}>
         <FlatList
@@ -168,24 +169,17 @@ class DetailScreen extends React.Component {
           renderItem={({ item, index }) => (
             <View style={s.fullFill}>
               <ImageDetail
-                ref={ref => (this.ImageDetailtRef = ref)}
-                closed={this.state.closed}
                 currentImage={item}
-                goToProfile={() =>
-                  this.hide(() =>
-                    this.props.navigation.navigate("Profile", { item: item })
-                  )
-                }
-                // hide={func => this.hide(func)}
+                goToProfile={() => this.goToProfile(item)}
                 show={this.show}
-                infoVisible={this.state.infoVisible}
-                opacityValue={this.state.opacityValue}
-                translateYValue={this.state.translateYValue}
+                infoVisible={infoVisible}
+                opacityValue={opacityValue}
+                translateYValue={translateYValue}
               />
             </View>
           )}
           horizontal
-          initialScrollIndex={this.state.currentIndex}
+          initialScrollIndex={currentIndex}
           getItemLayout={(data, index) => ({
             length: SCREEN_WIDTH,
             offset: SCREEN_WIDTH * index,
