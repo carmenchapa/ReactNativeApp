@@ -16,7 +16,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import Header from "../components/Header";
 import { getPhotoTitle } from "../helperFunctions";
 import { styles as s } from "../Styles";
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../Constants";
+import { SCREEN_WIDTH } from "../Constants";
 
 const opacityMin = 0;
 const translateYMin = 60;
@@ -27,7 +27,7 @@ class ImageDetail extends React.Component {
   }
 
   render() {
-    const { infoVisible } = this.props;
+    const { infoVisible, currentImage } = this.props;
     const animatedStyle = {
       opacity: this.props.opacityValue,
       transform: [{ translateY: this.props.translateYValue }]
@@ -45,32 +45,13 @@ class ImageDetail extends React.Component {
           />
 
           {infoVisible && (
-            <Animated.View style={[s.detailInfo, animatedStyle]}>
-              <Text style={s.detailPhotoTitle}>
-                {getPhotoTitle(this.props.currentImage)}
-              </Text>
-              <Text
-                style={s.detailLikes}
-              >{`${this.props.currentImage.likes} likes`}</Text>
-              <TouchableOpacity
-                style={s.profileContainer}
-                onPress={() => this.goProfile(this.props.currentImage)}
-              >
-                <Image
-                  style={s.userImage}
-                  source={{
-                    uri: this.props.currentImage.user.profile_image.medium
-                  }}
-                />
-                <View style={{ paddingLeft: 8, justifyContent: "center" }}>
-                  <Text style={s.detailUserName}>
-                    {this.props.currentImage.user.name}
-                  </Text>
-                  <Text style={s.viewProfile}>View profile</Text>
-                </View>
-              </TouchableOpacity>
-            </Animated.View>
+            <ImageInfo
+              image={currentImage}
+              animatedStyle={animatedStyle}
+              goProfile={() => this.goProfile(currentImage)}
+            />
           )}
+
           <TouchableOpacity
             style={s.profileTouchable}
             activeOpacity={0.9}
@@ -83,6 +64,28 @@ class ImageDetail extends React.Component {
     );
   }
 }
+
+const ImageInfo = props => (
+  <Animated.View style={[s.detailInfo, props.animatedStyle]}>
+    <Text style={s.detailPhotoTitle}>{getPhotoTitle(props.image)}</Text>
+    <Text style={s.detailLikes}>{`${props.image.likes} likes`}</Text>
+    <TouchableOpacity
+      style={s.profileContainer}
+      onPress={() => props.goProfile()}
+    >
+      <Image
+        style={s.userImage}
+        source={{
+          uri: props.image.user.profile_image.medium
+        }}
+      />
+      <View style={{ paddingLeft: 8, justifyContent: "center" }}>
+        <Text style={s.detailUserName}>{props.image.user.name}</Text>
+        <Text style={s.viewProfile}>View profile</Text>
+      </View>
+    </TouchableOpacity>
+  </Animated.View>
+);
 
 class DetailScreen extends React.Component {
   position = new Animated.ValueXY();
