@@ -36,7 +36,6 @@ class ProfileScreen extends React.Component {
   }
 
   render() {
-    console.log(" profile", this.props.profileImages.profileImages);
     const { navigation } = this.props;
     const { item } = navigation.state.params;
     return (
@@ -48,9 +47,7 @@ class ProfileScreen extends React.Component {
         />
 
         <FlatList
-          ref={ref => {
-            this.flatListRef = ref;
-          }}
+          ref={ref => (this.flatListRef = ref)}
           numColumns={2}
           data={this.props.profileImages.profileImages}
           keyExtractor={(item, index) => item + index}
