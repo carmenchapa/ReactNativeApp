@@ -23,13 +23,14 @@ const translateYMin = 60;
 
 class ImageDetail extends React.Component {
   state = {
-    currentIndex: this.props.navigation.state.params.index,
+    // currentIndex: this.props.navigation.state.params.index,
     infoVisible: false,
     opacityValue: new Animated.Value(opacityMin),
     translateYValue: new Animated.Value(translateYMin)
   };
 
   show(props) {
+    console.log("show");
     this.setState({ infoVisible: true });
     Animated.parallel([
       Animated.timing(this.state.opacityValue, {
@@ -57,140 +58,141 @@ class ImageDetail extends React.Component {
   }
 
   goProfile(image) {
-    this.props.navigation.navigate("Profile", { item: image });
+    this.props.goToProfile();
+    // this.props.navigation.navigate("Profile", { item: image });
     this.hide();
   }
 
-  close(image) {
-    this.hide();
-    this.props.navigation.goBack();
-  }
+  // close(image) {
+  //   this.hide();
+  //   this.props.navigation.goBack();
+  // }
 
   render() {
-    const { data, index } = this.props.navigation.state.params;
     const { infoVisible } = this.state;
     const animatedStyle = {
       opacity: this.state.opacityValue,
       transform: [{ translateY: this.state.translateYValue }]
     };
-    const imagesData =
-      data === "random"
-        ? this.props.images.images
-        : this.props.profileImages.profileImages;
-    const currentImage = imagesData[this.state.currentIndex];
-    // console.log(" image", currentImage);
 
-    // console.log(image);
     return (
-      <TouchableOpacity
-        activeOpacity={0.9}
-        style={s.flx1}
-        onPress={() => this.show()}
+      <ImageBackground
+        style={[s.flx1, s.endContent, { resizeMode: "cover" }]}
+        source={{ uri: this.props.currentImage.urls.regular }}
       >
-        <ImageBackground
-          style={[s.flx1, s.endContent]}
-          source={{ uri: currentImage.urls.regular }}
+        <LinearGradient
+          colors={["transparent", "rgba(0,0,0,0.9)"]}
+          start={[0.5, 0.7]}
+          style={[s.absoluteTop, s.fullFill]}
+        />
+
+        {infoVisible && (
+          <Animated.View style={[s.detailInfo, animatedStyle]}>
+            <Text style={s.detailPhotoTitle}>
+              {getPhotoTitle(this.props.currentImage)}
+            </Text>
+            <Text
+              style={s.detailLikes}
+            >{`${this.props.currentImage.likes} likes`}</Text>
+            <TouchableOpacity
+              style={s.profileContainer}
+              onPress={() => this.goProfile(this.props.currentImage)}
+            >
+              <Image
+                style={s.userImage}
+                source={{
+                  uri: this.props.currentImage.user.profile_image.medium
+                }}
+              />
+              <View style={{ paddingLeft: 8, justifyContent: "center" }}>
+                <Text style={s.detailUserName}>
+                  {this.props.currentImage.user.name}
+                </Text>
+                <Text style={s.viewProfile}>View profile</Text>
+              </View>
+            </TouchableOpacity>
+          </Animated.View>
+        )}
+        <TouchableOpacity
+          style={s.profileTouchable}
+          activeOpacity={0.9}
+          onPress={() => this.show()}
         >
-          <LinearGradient
-            colors={["transparent", "rgba(0,0,0,0.9)"]}
-            start={[0.5, 0.7]}
-            style={[s.absoluteTop, s.fullFill]}
-          />
+          <View style={s.flx1} />
+        </TouchableOpacity>
 
-          {infoVisible && (
-            <Animated.View style={[s.detailInfo, animatedStyle]}>
-              <Text style={s.detailPhotoTitle}>
-                {getPhotoTitle(currentImage)}
-              </Text>
-              <Text style={s.detailLikes}>{`${currentImage.likes} likes`}</Text>
-              <TouchableOpacity
-                style={s.profileContainer}
-                onPress={() => this.goProfile(currentImage)}
-              >
-                <Image
-                  style={s.userImage}
-                  source={{
-                    uri: currentImage.user.profile_image.medium
-                  }}
-                />
-                <View style={{ paddingLeft: 8, justifyContent: "center" }}>
-                  <Text style={s.detailUserName}>{currentImage.user.name}</Text>
-                  <Text style={s.viewProfile}>View profile</Text>
-                </View>
-              </TouchableOpacity>
-            </Animated.View>
-          )}
-
-          <Header
-            icon="closeWhite"
-            onPress={() => this.close()}
-            extraStyles={s.header}
-          />
-        </ImageBackground>
-      </TouchableOpacity>
+        {/* <Header
+          icon="closeWhite"
+          onPress={() => this.close()}
+          extraStyles={s.header}
+        /> */}
+      </ImageBackground>
     );
   }
 }
 
 class DetailScreen extends React.Component {
-  constructor() {
-    super();
+  position = new Animated.ValueXY();
+  state = {
+    currentIndex: this.props.navigation.state.params.index
+  };
 
-    this.position = new Animated.ValueXY();
-    this.state = {
-      currentIndex: 0
-    };
+  rotate = this.position.x.interpolate({
+    inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
+    outputRange: ["-4deg", "0deg", "4deg"],
+    extrapolate: "clamp"
+  });
 
-    this.rotate = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: ["-10deg", "0deg", "10deg"],
-      extrapolate: "clamp"
-    });
+  rotateAndTranslate = {
+    transform: [
+      { rotate: this.rotate },
+      ...this.position.getTranslateTransform()
+    ]
+  };
 
-    this.rotateAndTranslate = {
-      transform: [
-        {
-          rotate: this.rotate
-        },
-        ...this.position.getTranslateTransform()
-      ]
-    };
+  nextCardOpacity = this.position.x.interpolate({
+    inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
+    outputRange: [1, 0, 1],
+    extrapolate: "clamp"
+  });
+  nextCardScale = this.position.x.interpolate({
+    inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
+    outputRange: [1, 0.8, 1],
+    extrapolate: "clamp"
+  });
 
-    this.nextCardOpacity = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: [1, 0, 1],
-      extrapolate: "clamp"
-    });
-    this.nextCardScale = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: [1, 0.8, 1],
-      extrapolate: "clamp"
-    });
+  close(image) {
+    // this.hide();
+    this.props.navigation.goBack();
   }
+
   componentWillMount() {
     this.PanResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       onPanResponderMove: (evt, gestureState) => {
-        this.position.setValue({ x: gestureState.dx, y: gestureState.dy });
+        this.position.setValue({ x: gestureState.dx, y: 0 });
       },
       onPanResponderRelease: (evt, gestureState) => {
         if (gestureState.dx > 120) {
+          console.log(">120");
           Animated.spring(this.position, {
-            toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy }
+            toValue: { x: SCREEN_WIDTH + 100, y: 0 }
           }).start(() => {
             this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
               this.position.setValue({ x: 0, y: 0 });
             });
           });
         } else if (gestureState.dx < -120) {
+          console.log("<120");
           Animated.spring(this.position, {
-            toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy }
+            toValue: { x: -SCREEN_WIDTH - 100, y: 0 }
           }).start(() => {
-            this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
+            this.setState({ currentIndex: this.state.currentIndex - 1 }, () => {
               this.position.setValue({ x: 0, y: 0 });
             });
           });
         } else {
+          console.log("else");
           Animated.spring(this.position, {
             toValue: { x: 0, y: 0 },
             friction: 4
@@ -203,55 +205,42 @@ class DetailScreen extends React.Component {
   renderImages = () => {
     return this.props.images.images
       .map((item, i) => {
-        if (i < this.state.currentIndex) {
-          return null;
-        } else if (i == this.state.currentIndex) {
+        // if (i < this.state.currentIndex) {
+        //   return null;
+        // } else
+        if (i == this.state.currentIndex) {
           return (
             <Animated.View
               {...this.PanResponder.panHandlers}
-              key={item.id}
+              key={i}
               style={[
                 this.rotateAndTranslate,
-                {
-                  height: SCREEN_HEIGHT,
-                  width: SCREEN_WIDTH,
-                  position: "absolute"
-                }
+                s.fullFill,
+                { position: "absolute" }
               ]}
             >
-              {/* <ImageDetail */}
-              <ImageBackground
-                style={{
-                  flex: 1,
-                  height: null,
-                  width: null,
-                  resizeMode: "cover"
-                }}
-                source={{ uri: item.urls.regular }}
+              <ImageDetail
+                currentImage={item}
+                goToProfile={() =>
+                  this.props.navigation.navigate("Profile", { item: item })
+                }
               />
             </Animated.View>
           );
         } else {
           return (
             <Animated.View
-              key={item.id}
+              key={i}
               style={[
+                s.fullFill,
                 {
                   opacity: this.nextCardOpacity,
-                  transform: [{ scale: this.nextCardScale }],
-                  height: SCREEN_HEIGHT,
-                  width: SCREEN_WIDTH,
-                  position: "absolute"
+                  transform: [{ scale: this.nextCardScale }]
                 }
               ]}
             >
               <ImageBackground
-                style={{
-                  flex: 1,
-                  height: null,
-                  width: null,
-                  resizeMode: "cover"
-                }}
+                style={[s.flx1, s.endContent, { resizeMode: "cover" }]}
                 source={{ uri: item.urls.regular }}
               />
             </Animated.View>
@@ -262,7 +251,16 @@ class DetailScreen extends React.Component {
   };
 
   render() {
-    return <View style={{ flex: 1 }}>{this.renderImages()}</View>;
+    return (
+      <View style={s.flx1}>
+        {this.renderImages()}
+        <Header
+          icon="closeWhite"
+          onPress={() => this.close()}
+          extraStyles={s.header}
+        />
+      </View>
+    );
   }
 }
 
