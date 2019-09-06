@@ -34,6 +34,7 @@ const RootNavigator = createDrawerNavigator(
   },
   {
     initialRouteName: "Fee",
+    gesturesEnabled: false,
     headerMode: "none",
     cardStyle: { backgroundColor: "#fff" }
   }
